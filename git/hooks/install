@@ -1,0 +1,130 @@
+#!/usr/bin/env bash
+
+# toolchain-avr-gcc
+#
+# Copyright 2019 Andrew Countryman <apcountryman@gmail.com>
+#
+# Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+# file except in compliance with the License. You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software distributed under
+# the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied. See the License for the specific language governing
+# permissions and limitations under the License.
+
+# File: git/hooks/install
+# Description: Git hooks install script for the toolchain-avr-gcc repository.
+
+function abort()
+{
+    exit 1
+}
+
+function error()
+{
+    local param_message; declare -r param_message="$1"
+
+    ( >&2 echo "$MNEMONIC: $param_message" )
+}
+
+function display_help_text()
+{
+    echo "NAME"
+    echo "    $MNEMONIC - Install the toolchain-avr-gcc repository's Git hooks."
+    echo "SYNOPSIS"
+    echo "    $MNEMONIC --help"
+    echo "    $MNEMONIC --all"
+    echo "    $MNEMONIC [<hooks>]"
+    echo "OPTIONS"
+    echo "    --all"
+    echo "        Install all supported hooks."
+    echo "    --help"
+    echo "        Display this help text."
+    echo "    <hooks>"
+    echo "        The whitespace separated list of hooks to install. The following hooks"
+    echo "        are supported:"
+
+    for hook in $SUPPORTED_HOOKS; do
+        echo "            $hook"
+    done
+
+    echo "EXAMPLES"
+    echo "    $MNEMONIC --help"
+    echo "    $MNEMONIC --all"
+    echo "    $MNEMONIC $SUPPORTED_HOOKS"
+}
+
+function validate_hooks()
+{
+    while [[ $# -gt 0 ]]; do
+        local param_hook; param_hook="$1"
+        shift
+
+        if [[ ! -x "$HOOKS"/"$param_hook" ]]; then
+            error "'$param_hook' is not a supported hook, aborting"
+            abort
+        fi
+    done
+}
+
+function install_hooks()
+{
+    while [[ $# -gt 0 ]]; do
+        local param_hook; param_hook="$1"
+        shift
+
+        rm -f "$REPOSITORY"/.git/hooks/"$param_hook"
+
+        if ! ln -s "$HOOKS"/"$param_hook" "$REPOSITORY"/.git/hooks/"$param_hook" 2>/dev/null; then
+            error "'$param_hook' installation failed, aborting"
+            abort
+        fi
+    done
+}
+
+function main()
+{
+    declare -r SCRIPT=$( readlink -f $0 )
+    declare -r HOOKS=$( dirname $SCRIPT )
+    declare -r MNEMONIC=$( basename $SCRIPT )
+    declare -r REPOSITORY="$HOOKS"/../..
+    declare -r SUPPORTED_HOOKS=$( find "$HOOKS" -executable -type f \! \( -name install \) -printf "%f " )
+
+    local hooks; hooks=""
+
+    while [[ $# -gt 0 ]]; do
+        local argument; argument="$1"
+        shift
+
+        case $argument in
+            --help)
+                display_help_text
+                exit
+                ;;
+            --all)
+                hooks="$SUPPORTED_HOOKS"
+                break
+                ;;
+            --*)
+                ;&
+            -*)
+                error "'$argument' is not a supported option, aborting"
+                abort
+                ;;
+            "$MNEMONIC")
+                error "'$MNEMONIC' is not a hook, aborting"
+                abort
+                ;;
+            *)
+                hooks="$hooks $argument"
+                ;;
+        esac
+    done
+
+    validate_hooks $hooks
+    install_hooks  $hooks
+}
+
+main "$@"

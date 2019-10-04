@@ -1,0 +1,118 @@
+#!/usr/bin/env bash
+
+# toolchain-avr-gcc
+#
+# Copyright 2019 Andrew Countryman <apcountryman@gmail.com>
+#
+# Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+# file except in compliance with the License. You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software distributed under
+# the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied. See the License for the specific language governing
+# permissions and limitations under the License.
+
+# File: git/hooks/pre-commit
+# Description: Git pre-commit hook script for the toolchain-avr-gcc repository.
+
+function abort()
+{
+    exit 1
+}
+
+function error()
+{
+    local param_message; declare -r param_message="$1"
+
+    ( >&2 echo "$MNEMONIC: $param_message" )
+}
+
+function message()
+{
+    local param_content; declare -r param_content="$1"
+
+    echo -n "$MNEMONIC: $param_content"
+}
+
+function display_help_text()
+{
+    echo "NAME"
+    echo "    $MNEMONIC - Execute the toolchain-avr-gcc repository's Git pre-commit hook."
+    echo "SYNOPSIS"
+    echo "    $MNEMONIC --help"
+    echo "    $MNEMONIC"
+    echo "OPTIONS"
+    echo "    --help"
+    echo "        Display this help text."
+    echo "EXAMPLES"
+    echo "    $MNEMONIC --help"
+    echo "    $MNEMONIC"
+}
+
+function ensure_filenames_are_portable()
+{
+    message "checking for non-portable (non-ASCII) filenames ... "
+
+    if [[ $( git diff --cached --name-only --diff-filter=A -z $AGAINST | LC_ALL=C tr -d '[ -~]\0' | wc -c ) != 0 ]]; then
+        error "aborting commit due to non-portable (non-ASCII) filename(s)"
+        abort
+    fi
+
+    echo "none"
+}
+
+function ensure_no_whitespace_errors_are_present()
+{
+    message "checking for whitespace errors .................... "
+
+    if ! git diff-index --check --cached $AGAINST -- >/dev/null 2>&1; then
+        echo "error(s) found"
+        error "aborting commit due to whitespace error(s), listed below"
+        git diff-index --check --cached $AGAINST --
+        abort
+    fi
+
+    echo "none"
+}
+
+function main()
+{
+    declare -r SCRIPT=$( readlink -f $0 )
+    declare -r REPOSITORY=$( dirname $SCRIPT )/../..
+    declare -r MNEMONIC=$( basename $SCRIPT )
+
+    while [[ $# -gt 0 ]]; do
+        local argument; argument="$1"
+        shift
+
+        case $argument in
+            --help)
+                display_help_text
+                exit
+                ;;
+            --*)
+                ;&
+            -*)
+                error "'$argument' is not a supported option, aborting"
+                abort
+                ;;
+            *)
+                error "'$argument' is not a valid argument, aborting"
+                abort
+                ;;
+        esac
+    done
+
+    if git rev-parse --verify HEAD >/dev/null 2>&1; then
+        declare -r AGAINST=HEAD
+    else
+        declare -r AGAINST=$( git hash-object -t tree /dev/null )
+    fi
+
+    ensure_filenames_are_portable
+    ensure_no_whitespace_errors_are_present
+}
+
+main "$@"
