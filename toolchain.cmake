@@ -78,3 +78,6 @@ mark_as_advanced( CMAKE_STRIP )
 if( CMAKE_STRIP STREQUAL "CMAKE_STRIP-NOTFOUND" )
     message( FATAL_ERROR "avr-strip not found" )
 endif( CMAKE_STRIP STREQUAL "CMAKE_STRIP-NOTFOUND" )
+
+find_program( CMAKE_AVRDUDE avrdude )
+mark_as_advanced( CMAKE_AVRDUDE )
