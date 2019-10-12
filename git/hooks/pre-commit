@@ -57,7 +57,7 @@ function display_help_text()
 
 function ensure_filenames_are_portable()
 {
-    message "checking for non-portable (non-ASCII) filenames ............. "
+    message "checking for non-portable (non-ASCII) filenames .................. "
 
     if [[ $( git diff --cached --name-only --diff-filter=A -z $AGAINST | LC_ALL=C tr -d '[ -~]\0' | wc -c ) != 0 ]]; then
         echo "error(s) found"
@@ -70,7 +70,7 @@ function ensure_filenames_are_portable()
 
 function ensure_no_whitespace_errors_are_present()
 {
-    message "checking for whitespace errors .............................. "
+    message "checking for whitespace errors ................................... "
 
     if ! git diff-index --check --cached $AGAINST -- >/dev/null 2>&1; then
         echo "error(s) found"
@@ -134,8 +134,17 @@ function ensure_build_succeeds()
 function ensure_atmega2560_arduino_mega_2560_build_succeeds()
 {
     local name;       declare -r name="ATmega2560, Arduino Mega 2560"
-    local ellipsis;   declare -r ellipsis="..."
+    local ellipsis;   declare -r ellipsis="........"
     local build_name; declare -r build_name="atmega2560-arduino-mega-2560"
+
+    ensure_build_succeeds "$name" "$ellipsis" "$build_name"
+}
+
+function ensure_atmega328p_adafruit_feather_328p_build_succeeds()
+{
+    local name;       declare -r name="ATmega328/P, Adafruit Feather 328P"
+    local ellipsis;   declare -r ellipsis="..."
+    local build_name; declare -r build_name="atmega328p-adafruit-feather-328p"
 
     ensure_build_succeeds "$name" "$ellipsis" "$build_name"
 }
@@ -188,6 +197,7 @@ function main()
     ensure_filenames_are_portable
     ensure_no_whitespace_errors_are_present
     ensure_atmega2560_arduino_mega_2560_build_succeeds
+    ensure_atmega328p_adafruit_feather_328p_build_succeeds
 }
 
 main "$@"
