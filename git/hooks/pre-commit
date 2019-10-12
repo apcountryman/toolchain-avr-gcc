@@ -176,6 +176,15 @@ function ensure_atmega32u4_adafruit_circuit_playground_classic_build_succeeds()
     ensure_build_succeeds "$name" "$ellipsis" "$build_name"
 }
 
+function ensure_atmega32u4_adafruit_feather_32u4_adalogger_build_succeeds()
+{
+    local name;       declare -r name="ATmega32U4, Adafruit Feather 32u4 Adalogger"
+    local ellipsis;   declare -r ellipsis="......."
+    local build_name; declare -r build_name="atmega32u4-adafruit-feather-32u4-adalogger"
+
+    ensure_build_succeeds "$name" "$ellipsis" "$build_name"
+}
+
 function main()
 {
     declare -r SCRIPT=$( readlink -f $0 )
@@ -228,6 +237,7 @@ function main()
     ensure_atmega328p_adafruit_metro_mini_build_succeeds
     ensure_atmega328p_arduino_uno_build_succeeds
     ensure_atmega32u4_adafruit_circuit_playground_classic_build_succeeds
+    ensure_atmega32u4_adafruit_feather_32u4_adalogger_build_succeeds
 }
 
 main "$@"
