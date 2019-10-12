@@ -19,7 +19,8 @@ Set `CMAKE_TOOLCHAIN_FILE` to the path to this repository's `toolchain.cmake` fi
 initializing CMake.
 
 Documentation for the usage of `add_avrdude_programming_targets()` and the targets it
-creates can be found in `toolchain.cmake`.
+creates [can be found in the `toolchain.cmake` file in this repository](toolchain.cmake).
+Usage examples [can be found in the `examples` directory in this repository](examples).
 
 ### Finding Tools
 This toolchain expects to find `avr-gcc`, `avr-g++`, associated binary utilities, and
