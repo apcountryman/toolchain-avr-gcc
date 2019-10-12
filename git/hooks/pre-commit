@@ -158,6 +158,15 @@ function ensure_atmega328p_adafruit_metro_mini_build_succeeds()
     ensure_build_succeeds "$name" "$ellipsis" "$build_name"
 }
 
+function ensure_atmega328p_arduino_uno_build_succeeds()
+{
+    local name;       declare -r name="ATmega328/P, Arduino Uno"
+    local ellipsis;   declare -r ellipsis="............."
+    local build_name; declare -r build_name="atmega328p-arduino-uno"
+
+    ensure_build_succeeds "$name" "$ellipsis" "$build_name"
+}
+
 function main()
 {
     declare -r SCRIPT=$( readlink -f $0 )
@@ -208,6 +217,7 @@ function main()
     ensure_atmega2560_arduino_mega_2560_build_succeeds
     ensure_atmega328p_adafruit_feather_328p_build_succeeds
     ensure_atmega328p_adafruit_metro_mini_build_succeeds
+    ensure_atmega328p_arduino_uno_build_succeeds
 }
 
 main "$@"
