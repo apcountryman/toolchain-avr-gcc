@@ -42,20 +42,25 @@ function display_help_text()
     echo "    $MNEMONIC - Execute the toolchain-avr-gcc repository's Git pre-commit hook."
     echo "SYNOPSIS"
     echo "    $MNEMONIC --help"
-    echo "    $MNEMONIC"
+    echo "    $MNEMONIC [--jobs <jobs>]"
     echo "OPTIONS"
     echo "    --help"
     echo "        Display this help text."
+    echo "    --jobs <jobs>"
+    echo "        Set the number of make jobs to use when building. If the number of jobs"
+    echo "        is not specified, nproc - 1 jobs will be used."
     echo "EXAMPLES"
     echo "    $MNEMONIC --help"
     echo "    $MNEMONIC"
+    echo "    $MNEMONIC --jobs 1"
 }
 
 function ensure_filenames_are_portable()
 {
-    message "checking for non-portable (non-ASCII) filenames ... "
+    message "checking for non-portable (non-ASCII) filenames ............. "
 
     if [[ $( git diff --cached --name-only --diff-filter=A -z $AGAINST | LC_ALL=C tr -d '[ -~]\0' | wc -c ) != 0 ]]; then
+        echo "error(s) found"
         error "aborting commit due to non-portable (non-ASCII) filename(s)"
         abort
     fi
@@ -65,7 +70,7 @@ function ensure_filenames_are_portable()
 
 function ensure_no_whitespace_errors_are_present()
 {
-    message "checking for whitespace errors .................... "
+    message "checking for whitespace errors .............................. "
 
     if ! git diff-index --check --cached $AGAINST -- >/dev/null 2>&1; then
         echo "error(s) found"
@@ -77,11 +82,71 @@ function ensure_no_whitespace_errors_are_present()
     echo "none"
 }
 
+function ensure_build_succeeds()
+{
+    local param_name;       declare -r param_name="$1"
+    local param_ellipsis;   declare -r param_ellipsis="$2"
+    local param_build_name; declare -r param_build_name="$3"
+
+    local build_directory; declare -r build_directory="$REPOSITORY"/examples/build/"$param_build_name"
+    local cmake_options;   declare -r cmake_options="-C $REPOSITORY/examples/configuration/CMakeLists.txt.$param_build_name"
+
+    message "checking for build ($param_name) errors $param_ellipsis "
+
+    if [[ ! -d "$build_directory" ]]; then
+        if ! mkdir -p "$build_directory" >/dev/null 2>&1; then
+            echo "error(s) found"
+            error "aborting commit due to build ($param_name) directory creation error(s), listed below"
+            mkdir -p "$build_directory"
+            abort
+        fi
+
+        cd "$build_directory"
+
+        if ! cmake -DCMAKE_TOOLCHAIN_FILE="$REPOSITORY"/toolchain.cmake $cmake_options "$REPOSITORY"/examples >/dev/null 2>&1; then
+            echo "error(s) found"
+            error "aborting commit due to build ($param_name) CMake error(s), listed below"
+            rm -rf *
+            cmake -DCMAKE_TOOLCHAIN_FILE="$REPOSITORY"/toolchain.cmake $cmake_options "$REPOSITORY"/examples
+            abort
+        fi
+    fi
+
+    cd "$build_directory"
+
+    if ! cmake $cmake_options . >/dev/null 2>&1; then
+        echo "error(s) found"
+        error "aborting commit due to build ($param_name) CMake error(s), listed below"
+        cmake $cmake_options .
+        abort
+    fi
+
+    if ! make "$JOBS" --quiet >/dev/null 2>&1; then
+        echo "error(s) found"
+        error "aborting commit due to build ($param_name) make error(s), listed below"
+        make "$JOBS"
+        abort
+    fi
+
+    echo "none"
+}
+
+function ensure_atmega2560_arduino_mega_2560_build_succeeds()
+{
+    local name;       declare -r name="ATmega2560, Arduino Mega 2560"
+    local ellipsis;   declare -r ellipsis="..."
+    local build_name; declare -r build_name="atmega2560-arduino-mega-2560"
+
+    ensure_build_succeeds "$name" "$ellipsis" "$build_name"
+}
+
 function main()
 {
     declare -r SCRIPT=$( readlink -f $0 )
     declare -r REPOSITORY=$( dirname $SCRIPT )/../..
     declare -r MNEMONIC=$( basename $SCRIPT )
+
+    JOBS="-j$(( $( nproc ) - 1 ))"
 
     while [[ $# -gt 0 ]]; do
         local argument; argument="$1"
@@ -91,6 +156,15 @@ function main()
             --help)
                 display_help_text
                 exit
+                ;;
+            --jobs)
+                if [[ $# -eq 0 ]]; then
+                    error "job count not specified, aborting"
+                    abort
+                fi
+
+                JOBS="-j$1"
+                shift
                 ;;
             --*)
                 ;&
@@ -113,6 +187,7 @@ function main()
 
     ensure_filenames_are_portable
     ensure_no_whitespace_errors_are_present
+    ensure_atmega2560_arduino_mega_2560_build_succeeds
 }
 
 main "$@"
