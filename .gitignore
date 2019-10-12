@@ -14,3 +14,6 @@
 
 # File: .gitignore
 # Description: Git ignore rules for the toolchain-avr-gcc repository.
+
+# ignore the examples build directory
+examples/build
