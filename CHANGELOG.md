@@ -3,6 +3,10 @@ UTC is used when determining release dates.
 
 ## [Unreleased](https://github.com/apcountryman/toolchain-avr-gcc/compare/master...develop)
 
+## [0.2.1](https://github.com/apcountryman/toolchain-avr-gcc/compare/0.2.0...0.2.1) - 2019-10-13
+### Fixed
+- [`add_avrdude_programming_targets()` documentation usage examples](https://github.com/apcountryman/toolchain-avr-gcc/issues/11).
+
 ## [0.2.0](https://github.com/apcountryman/toolchain-avr-gcc/compare/0.1.0...0.2.0) - 2019-10-13
 ### Added
 - [Examples build system infrastructure](https://github.com/apcountryman/toolchain-avr-gcc/issues/5).
