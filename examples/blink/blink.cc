@@ -20,6 +20,7 @@
  */
 
 #include <avr/io.h>
+#include <stdint.h>
 #include <util/delay.h>
 
 /**
@@ -58,6 +59,8 @@
  */
 #define PIN( port_letter ) PIN_EXPAND( port_letter )
 
+namespace {
+
 /**
  * \brief Convert a frequency, in Hz, to a period, in ms.
  *
@@ -65,32 +68,37 @@
  *
  * \return The period, in ms.
  */
-#define CONVERT_FREQUENCY_HZ_TO_PERIOD_MS( frequency_hz ) ( 1000 / frequency_hz )
+constexpr double convert_frequency_hz_to_period_ms( double frequency_hz ) noexcept
+{
+    return 1000 / frequency_hz;
+}
 
 /**
  * \brief The DDR register for the I/O port the indicator is connected to.
  */
-#define INDICATOR_DDR DDR( INDICATOR_PORT_LETTER )
+auto volatile & INDICATOR_DDR = DDR( INDICATOR_PORT_LETTER );
 
 /**
- * \brief The PIN register for the I/O port the indicator is connected to.
+ * \brief The name of the PIN register for the I/O port the indicator is connected to.
  */
-#define INDICATOR_PIN PIN( INDICATOR_PORT_LETTER )
+auto volatile & INDICATOR_PIN = PIN( INDICATOR_PORT_LETTER );
 
 /**
  * \brief The mask identifying the I/O port pin the indicator is connected to.
  */
-#define INDICATOR_MASK ( 0b1 << INDICATOR_PIN_NUMBER )
+constexpr uint8_t INDICATOR_MASK { 0b1 << INDICATOR_PIN_NUMBER };
 
 /**
  * \brief The indicator blink period, in ms.
  */
-#define INDICATOR_BLINK_PERIOD_MS CONVERT_FREQUENCY_HZ_TO_PERIOD_MS( INDICATOR_BLINK_FREQUENCY_HZ )
+constexpr auto INDICATOR_BLINK_PERIOD_MS = convert_frequency_hz_to_period_ms( INDICATOR_BLINK_FREQUENCY_HZ );
+
+}
 
 /**
  * \brief Blink the indicator.
  */
-int main( void )
+int main()
 {
     INDICATOR_DDR = INDICATOR_MASK;
 
