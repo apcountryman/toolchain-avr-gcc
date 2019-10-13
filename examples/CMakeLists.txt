@@ -31,12 +31,12 @@ set( ATMEL_AVR_MCU   "" CACHE STRING "Atmel AVR: MCU"                  )
 set( ATMEL_AVR_F_CPU "" CACHE STRING "Atmel AVR: MCU frequency, in Hz" )
 
 # avrdude configuration
-option( AVRDUDE_ALWAYS_RECOVER_FUSES_ENABLED          OFF "avrdude: always recover fuses"          )
-option( AVRDUDE_DISABLE_AUTOMATIC_FLASH_ERASE_ENABLED OFF "avrdude: disable automatic Flash erase" )
-option( AVRDUDE_DISABLE_AUTOMATIC_VERIFY_ENABLED      OFF "avrdude: disable automatic verify"      )
-option( AVRDUDE_DISABLE_FUSE_CHECKS_ENABLED           OFF "avrdude: disable fuse checks"           )
-option( AVRDUDE_DISABLE_WRITES_ENABLED                OFF "avrdude: disable writes"                )
-option( AVRDUDE_OVERRIDE_SIGNATURE_CHECK_ENABLED      OFF "avrdude: override signature check"      )
+option( AVRDUDE_ALWAYS_RECOVER_FUSES_ENABLED          "avrdude: always recover fuses"          OFF )
+option( AVRDUDE_DISABLE_AUTOMATIC_FLASH_ERASE_ENABLED "avrdude: disable automatic Flash erase" OFF )
+option( AVRDUDE_DISABLE_AUTOMATIC_VERIFY_ENABLED      "avrdude: disable automatic verify"      OFF )
+option( AVRDUDE_DISABLE_FUSE_CHECKS_ENABLED           "avrdude: disable fuse checks"           OFF )
+option( AVRDUDE_DISABLE_WRITES_ENABLED                "avrdude: disable writes"                OFF )
+option( AVRDUDE_OVERRIDE_SIGNATURE_CHECK_ENABLED      "avrdude: override signature check"      OFF )
 mark_as_advanced(
     AVRDUDE_ALWAYS_RECOVER_FUSES_ENABLED
     AVRDUDE_DISABLE_AUTOMATIC_FLASH_ERASE_ENABLED
@@ -102,3 +102,6 @@ set(
     -DF_CPU=${ATMEL_AVR_F_CPU} \
     "
 )
+
+# build the blink examples
+add_subdirectory( blink )
