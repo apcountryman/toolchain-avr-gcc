@@ -183,18 +183,20 @@ mark_as_advanced( CMAKE_AVRDUDE )
 # EXAMPLES
 #         add_avrdude_programming_targets(
 #                 example
-#                 PART       atmega328p
-#                 PROGRAMMER arduino
-#                 PORT       /dev/ttyACM0
+#                 DISABLE_AUTOMATIC_FLASH_ERASE
 #                 BAUD_RATE  115200
+#                 PART       atmega328p
+#                 PORT       /dev/ttyACM0
+#                 PROGRAMMER arduino
 #                 VERBOSITY  VERBOSE
 #         )
 #         add_avrdude_programming_targets(
 #                 example
-#                 PART       atmega2560
-#                 PROGRAMMER wiring
-#                 PORT       /dev/ttyACM0
+#                 DISABLE_AUTOMATIC_FLASH_ERASE
 #                 BAUD_RATE  115200
+#                 PART       atmega2560
+#                 PORT       /dev/ttyACM0
+#                 PROGRAMMER wiring
 #                 VERBOSITY  VERBOSE
 #         )
 function( add_avrdude_programming_targets executable )
