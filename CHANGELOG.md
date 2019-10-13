@@ -2,6 +2,8 @@
 UTC is used when determining release dates.
 
 ## [Unreleased](https://github.com/apcountryman/toolchain-avr-gcc/compare/master...develop)
+
+## [0.2.0](https://github.com/apcountryman/toolchain-avr-gcc/compare/0.1.0...0.2.0) - 2019-10-13
 ### Added
 - [Examples build system infrastructure](https://github.com/apcountryman/toolchain-avr-gcc/issues/5).
 - [Blink examples](https://github.com/apcountryman/toolchain-avr-gcc/issues/6).
