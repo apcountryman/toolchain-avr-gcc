@@ -1,5 +1,5 @@
 /**
- * picolibrary
+ * toolchain-avr-gcc
  *
  * Copyright 2019 Andrew Countryman <apcountryman@gmail.com>
  *
