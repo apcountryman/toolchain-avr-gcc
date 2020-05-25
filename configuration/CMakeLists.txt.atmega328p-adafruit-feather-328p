@@ -12,8 +12,8 @@
 # KIND, either express or implied. See the License for the specific language governing
 # permissions and limitations under the License.
 
-# File: examples/configuration/CMakeLists.txt.atmega328p-adafruit-metro-mini
-# Description: ATmega328/P Adafruit Metro Mini toolchain-avr-gcc examples configuration.
+# File: configuration/CMakeLists.txt.atmega328p-adafruit-feather-328p
+# Description: ATmega328/P Adafruit Feather 328P toolchain-avr-gcc configuration.
 
 # CMake build type configuration
 set( CMAKE_BUILD_TYPE "MinSizeRel" CACHE STRING "" FORCE )
@@ -21,14 +21,14 @@ mark_as_advanced( CMAKE_BUILD_TYPE )
 
 # Atmel AVR configuration
 set( ATMEL_AVR_MCU   "atmega328p" CACHE STRING "" FORCE )
-set( ATMEL_AVR_F_CPU "16000000"   CACHE STRING "" FORCE )
+set( ATMEL_AVR_F_CPU "8000000"    CACHE STRING "" FORCE )
 mark_as_advanced(
     ATMEL_AVR_MCU
     ATMEL_AVR_F_CPU
 )
 
 # avrdude configuration
-set( AVRDUDE_BAUD_RATE                             "115200"     CACHE STRING "" FORCE )
+set( AVRDUDE_BAUD_RATE                             "57600"      CACHE STRING "" FORCE )
 set( AVRDUDE_BIT_CLOCK                             ""           CACHE STRING "" FORCE )
 set( AVRDUDE_DELAY                                 ""           CACHE STRING "" FORCE )
 set( AVRDUDE_DISABLE_AUTOMATIC_FLASH_ERASE_ENABLED ON           CACHE BOOL   "" FORCE )
