@@ -106,6 +106,22 @@ function ensure_no_whitespace_errors_are_present()
     echo "none"
 }
 
+function ensure_no_script_errors_are_present()
+{
+    message "checking for script errors ................................................... "
+
+    local scripts; mapfile -t scripts < <( git -C "$repository" ls-files | xargs -r -d '\n' -I '{}' find "$repository/{}" -executable ); readonly scripts
+
+    if ! shellcheck "${scripts[@]}" > "/dev/null" 2>&1; then
+        errors_found
+        error "aborting commit due to script error(s), listed below"
+        shellcheck "${scripts[@]}"
+        abort
+    fi
+
+    echo "none"
+}
+
 function ensure_no_build_errors_are_present()
 {
     local -r build_type="$1"
@@ -254,6 +270,7 @@ function main()
 
     ensure_filenames_are_portable
     ensure_no_whitespace_errors_are_present
+    ensure_no_script_errors_are_present
     ensure_no_atmega2560_arduino_mega_2560_build_errors_are_present
     ensure_no_atmega328p_adafruit_feather_328p_build_errors_are_present
     ensure_no_atmega328p_adafruit_metro_mini_build_errors_are_present
