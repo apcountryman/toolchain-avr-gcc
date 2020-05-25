@@ -86,7 +86,7 @@ auto volatile & INDICATOR_PIN = PIN( INDICATOR_PORT_LETTER );
 /**
  * \brief The mask identifying the I/O port pin the indicator is connected to.
  */
-constexpr uint8_t INDICATOR_MASK { 0b1 << INDICATOR_PIN_NUMBER };
+constexpr auto INDICATOR_MASK = uint8_t { 0b1 << INDICATOR_PIN_NUMBER };
 
 /**
  * \brief The indicator blink period, in ms.

@@ -54,7 +54,7 @@ function display_help_text()
     echo "        - Filenames are portable"
     echo "        - No whitespace errors are present"
     echo "        - No script errors are present"
-    echo "        - No example build errors are present"
+    echo "        - No build errors are present"
     echo "SYNOPSIS"
     echo "    $mnemonic --help"
     echo "    $mnemonic --version"
@@ -106,6 +106,22 @@ function ensure_no_whitespace_errors_are_present()
     echo "none"
 }
 
+function ensure_no_script_errors_are_present()
+{
+    message "checking for script errors ................................................... "
+
+    local scripts; mapfile -t scripts < <( git -C "$repository" ls-files | xargs -r -d '\n' -I '{}' find "$repository/{}" -executable ); readonly scripts
+
+    if ! shellcheck "${scripts[@]}" > "/dev/null" 2>&1; then
+        errors_found
+        error "aborting commit due to script error(s), listed below"
+        shellcheck "${scripts[@]}"
+        abort
+    fi
+
+    echo "none"
+}
+
 function ensure_no_build_errors_are_present()
 {
     local -r build_type="$1"
@@ -114,15 +130,15 @@ function ensure_no_build_errors_are_present()
     message "checking for ($build_type) build errors $ellipsis "
 
     local -r toolchain_file="$repository/toolchain.cmake"
-    local -r build_directory="$repository/examples/build/$build_type"
-    local -r build_configuration="$repository/examples/configuration/CMakeLists.txt.$build_type"
+    local -r build_directory="$repository/build/$build_type"
+    local -r build_configuration="$repository/configuration/CMakeLists.txt.$build_type"
 
     if [[ ! -d "$build_directory" ]]; then
-        if ! cmake -DCMAKE_TOOLCHAIN_FILE="$toolchain_file" -C "$build_configuration" -S "$repository/examples" -B "$build_directory" > "/dev/null" 2>&1; then
+        if ! cmake -DCMAKE_TOOLCHAIN_FILE="$toolchain_file" -C "$build_configuration" -S "$repository" -B "$build_directory" > "/dev/null" 2>&1; then
             errors_found
             error "aborting commit due to ($build_type) build CMake initialization error(s), listed below"
             rm -rf "$build_directory"
-            cmake -DCMAKE_TOOLCHAIN_FILE="$toolchain_file" -C "$build_configuration" -S "$repository/examples" -B "$build_directory"
+            cmake -DCMAKE_TOOLCHAIN_FILE="$toolchain_file" -C "$build_configuration" -S "$repository" -B "$build_directory"
             abort
         fi
     fi
@@ -254,6 +270,7 @@ function main()
 
     ensure_filenames_are_portable
     ensure_no_whitespace_errors_are_present
+    ensure_no_script_errors_are_present
     ensure_no_atmega2560_arduino_mega_2560_build_errors_are_present
     ensure_no_atmega328p_adafruit_feather_328p_build_errors_are_present
     ensure_no_atmega328p_adafruit_metro_mini_build_errors_are_present

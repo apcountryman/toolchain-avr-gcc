@@ -12,8 +12,8 @@
 # KIND, either express or implied. See the License for the specific language governing
 # permissions and limitations under the License.
 
-# File: examples/configuration/CMakeLists.txt.atmega32u4-adafruit-circuit-playground-classic
-# Description: ATmega32U4 Adafruit Circuit Playground Classic toolchain-avr-gcc examples
+# File: configuration/CMakeLists.txt.atmega32u4-adafruit-circuit-playground-classic
+# Description: ATmega32U4 Adafruit Circuit Playground Classic toolchain-avr-gcc
 #       configuration.
 
 # CMake build type configuration
