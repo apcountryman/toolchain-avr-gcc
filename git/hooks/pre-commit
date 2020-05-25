@@ -54,7 +54,7 @@ function display_help_text()
     echo "        - Filenames are portable"
     echo "        - No whitespace errors are present"
     echo "        - No script errors are present"
-    echo "        - No example build errors are present"
+    echo "        - No build errors are present"
     echo "SYNOPSIS"
     echo "    $mnemonic --help"
     echo "    $mnemonic --version"
