@@ -7,6 +7,7 @@ UTC is used when determining release dates.
 ## [Unreleased](https://github.com/apcountryman/toolchain-avr-gcc/compare/master...develop)
 ### Added
 - [Script error checks](https://github.com/apcountryman/toolchain-avr-gcc/issues/18).
+- [`clang-format` formatting CI job](https://github.com/apcountryman/toolchain-avr-gcc/issues/25).
 
 ### Changed
 - [Simplify examples directory structure](https://github.com/apcountryman/toolchain-avr-gcc/issues/19).

@@ -1,0 +1,124 @@
+# toolchain-avr-gcc
+#
+# Copyright 2020 Andrew Countryman <apcountryman@gmail.com>
+#
+# Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+# file except in compliance with the License. You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software distributed under
+# the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied. See the License for the specific language governing
+# permissions and limitations under the License.
+
+# File: .clang-format
+# Description: clang-format style configuration for the toolchain-avr-gcc repository.
+
+Language: Cpp
+Standard: Cpp11
+
+BasedOnStyle: Google
+
+DisableFormat: false
+
+# general
+BraceWrapping:
+    AfterClass: false
+    AfterControlStatement: false
+    AfterEnum: false
+    AfterFunction: true
+    AfterNamespace: false
+    AfterStruct: false
+    AfterUnion: false
+    AfterExternBlock: false
+    BeforeCatch: false
+    BeforeElse: false
+    IndentBraces: false
+    SplitEmptyFunction: true
+BreakBeforeBraces: Custom
+ColumnLimit: 90
+ContinuationIndentWidth: 4
+IndentWidth: 4
+SpaceBeforeParens: ControlStatements
+SpaceInEmptyParentheses: false
+SpacesInParentheses: true
+TabWidth: 4
+UseTab: Never
+
+# preprocessor
+AlignEscapedNewlines: Left
+ForEachMacros:
+IncludeBlocks: Regroup
+IncludeCategories:
+IncludeIsMainRegex: ""
+IndentPPDirectives: None
+MacroBlockBegin: ""
+MacroBlockEnd: ""
+SortIncludes: true
+
+# namespaces
+CompactNamespaces: true
+FixNamespaceComments: true
+NamespaceIndentation: None
+
+# templates
+AlwaysBreakTemplateDeclarations: true
+SpaceAfterTemplateKeyword: false
+SpacesInAngles: false
+
+# classes/structs
+AccessModifierOffset: -2
+BreakBeforeInheritanceComma: true
+BreakConstructorInitializers: AfterColon
+ConstructorInitializerAllOnOneLineOrOnePerLine: true
+ConstructorInitializerIndentWidth: 4
+
+# function declarations/definitions
+AllowAllParametersOfDeclarationOnNextLine: false
+AllowShortFunctionsOnASingleLine: None
+AlwaysBreakAfterReturnType: None
+BinPackParameters: false
+IndentWrappedFunctionNames: false
+
+# function calls
+AlignAfterOpenBracket: AlwaysBreak
+BinPackArguments: false
+
+# declarations/expressions/statements
+AlignConsecutiveAssignments: true
+AlignConsecutiveDeclarations: true
+AlignOperands: true
+AllowShortBlocksOnASingleLine: true
+AllowShortCaseLabelsOnASingleLine: true
+AllowShortIfStatementsOnASingleLine: true
+AllowShortLoopsOnASingleLine: true
+AlwaysBreakBeforeMultilineStrings: true
+BreakBeforeBinaryOperators: NonAssignment
+BreakBeforeTernaryOperators: true
+BreakStringLiterals: true
+Cpp11BracedListStyle: false
+DerivePointerAlignment: false
+IndentCaseLabels: true
+KeepEmptyLinesAtTheStartOfBlocks: false
+MaxEmptyLinesToKeep: 1
+PointerAlignment: Middle
+RawStringFormats:
+SortUsingDeclarations: true
+SpaceBeforeAssignmentOperators: true
+SpacesInSquareBrackets: true
+
+# comments
+AlignTrailingComments: true
+CommentPragmas: ""
+ReflowComments: true
+SpacesBeforeTrailingComments: 1
+
+# penalties
+PenaltyBreakAssignment: 99
+PenaltyBreakBeforeFirstCallParameter: 0
+PenaltyBreakComment: 0
+PenaltyBreakFirstLessLess: 99
+PenaltyBreakString: 0
+PenaltyExcessCharacter: 1
+PenaltyReturnTypeOnItsOwnLine: 99

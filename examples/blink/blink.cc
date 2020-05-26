@@ -30,7 +30,7 @@
  *
  * \return The name of the I/O port's DDR register.
  */
-#define DDR_EXPAND( port_letter ) DDR ## port_letter
+#define DDR_EXPAND( port_letter ) DDR##port_letter
 
 /**
  * \brief Get the name of an I/O port's DDR register.
@@ -48,7 +48,7 @@
  *
  * \return The name of the I/O port's PIN register.
  */
-#define PIN_EXPAND( port_letter ) PIN ## port_letter
+#define PIN_EXPAND( port_letter ) PIN##port_letter
 
 /**
  * \brief Get the name of an I/O port's PIN register.
@@ -86,14 +86,14 @@ auto volatile & INDICATOR_PIN = PIN( INDICATOR_PORT_LETTER );
 /**
  * \brief The mask identifying the I/O port pin the indicator is connected to.
  */
-constexpr auto INDICATOR_MASK = uint8_t { 0b1 << INDICATOR_PIN_NUMBER };
+constexpr auto INDICATOR_MASK = uint8_t{ 0b1 << INDICATOR_PIN_NUMBER };
 
 /**
  * \brief The indicator blink period, in ms.
  */
 constexpr auto INDICATOR_BLINK_PERIOD_MS = convert_frequency_hz_to_period_ms( INDICATOR_BLINK_FREQUENCY_HZ );
 
-}
+} // namespace
 
 /**
  * \brief Blink the indicator.
