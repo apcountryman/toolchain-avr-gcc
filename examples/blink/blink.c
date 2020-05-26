@@ -29,7 +29,7 @@
  *
  * \return The name of the I/O port's DDR register.
  */
-#define DDR_EXPAND( port_letter ) DDR ## port_letter
+#define DDR_EXPAND( port_letter ) DDR##port_letter
 
 /**
  * \brief Get the name of an I/O port's DDR register.
@@ -47,7 +47,7 @@
  *
  * \return The name of the I/O port's PIN register.
  */
-#define PIN_EXPAND( port_letter ) PIN ## port_letter
+#define PIN_EXPAND( port_letter ) PIN##port_letter
 
 /**
  * \brief Get the name of an I/O port's PIN register.
@@ -85,7 +85,8 @@
 /**
  * \brief The indicator blink period, in ms.
  */
-#define INDICATOR_BLINK_PERIOD_MS CONVERT_FREQUENCY_HZ_TO_PERIOD_MS( INDICATOR_BLINK_FREQUENCY_HZ )
+#define INDICATOR_BLINK_PERIOD_MS \
+    CONVERT_FREQUENCY_HZ_TO_PERIOD_MS( INDICATOR_BLINK_FREQUENCY_HZ )
 
 /**
  * \brief Blink the indicator.

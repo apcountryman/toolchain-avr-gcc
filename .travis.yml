@@ -20,6 +20,10 @@ dist: bionic
 
 jobs:
     include:
+        - name: "format"
+          language: minimal
+          script: ./ci/format
+
         - name: "analyze (static) - shellcheck"
           language: bash
           script: ./ci/analyze --analyzer shellcheck
