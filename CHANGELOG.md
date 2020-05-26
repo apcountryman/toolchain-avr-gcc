@@ -5,6 +5,8 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 UTC is used when determining release dates.
 
 ## [Unreleased](https://github.com/apcountryman/toolchain-avr-gcc/compare/master...develop)
+
+## [0.3.0](https://github.com/apcountryman/toolchain-avr-gcc/compare/0.2.1...0.3.0)
 ### Added
 - [Script error checks](https://github.com/apcountryman/toolchain-avr-gcc/issues/18).
 - [`clang-format` formatting CI job](https://github.com/apcountryman/toolchain-avr-gcc/issues/25).
@@ -24,7 +26,7 @@ UTC is used when determining release dates.
 - [Examples build system infrastructure](https://github.com/apcountryman/toolchain-avr-gcc/issues/5).
 - [Blink examples](https://github.com/apcountryman/toolchain-avr-gcc/issues/6).
 
-## [0.1.0](https://github.com/apcountryman/toolchain-avr-gcc/compare/7f91b3063d4e921bbb756794eebf4f422cee1cac...0.1.0) - 2019-10-05
+## [0.1.0](https://github.com/apcountryman/toolchain-avr-gcc/compare/0.0.0...0.1.0) - 2019-10-05
 ### Added
 - Repository Git ignore rules.
 - Repository Git hooks install script.
