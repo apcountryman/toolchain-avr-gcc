@@ -12,6 +12,7 @@ UTC is used when determining release dates.
 - [Simplify examples directory structure](https://github.com/apcountryman/toolchain-avr-gcc/issues/19).
 - [Update `CHANGELOG` front matter](https://github.com/apcountryman/toolchain-avr-gcc/issues/20).
 - [Update `README` formatting](https://github.com/apcountryman/toolchain-avr-gcc/issues/21).
+- [Cleanup toolchain](https://github.com/apcountryman/toolchain-avr-gcc/issues/22).
 
 ## [0.2.1](https://github.com/apcountryman/toolchain-avr-gcc/compare/0.2.0...0.2.1) - 2019-10-13
 ### Fixed

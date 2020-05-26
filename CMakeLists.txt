@@ -21,11 +21,6 @@ project(
     LANGUAGES C CXX
 )
 
-# ensure avrdude was found
-if( CMAKE_AVRDUDE STREQUAL "CMAKE_AVRDUDE-NOTFOUND" )
-    message( FATAL_ERROR "avrdude not found" )
-endif( CMAKE_AVRDUDE STREQUAL "CMAKE_AVRDUDE-NOTFOUND" )
-
 # Atmel AVR configuration
 set( ATMEL_AVR_MCU   "" CACHE STRING "Atmel AVR: MCU"                  )
 set( ATMEL_AVR_F_CPU "" CACHE STRING "Atmel AVR: MCU frequency, in Hz" )
