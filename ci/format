@@ -2,7 +2,7 @@
 
 # toolchain-avr-gcc
 #
-# Copyright 2019, 2020 Andrew Countryman <apcountryman@gmail.com>
+# Copyright 2020 Andrew Countryman <apcountryman@gmail.com>
 #
 # Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
 # file except in compliance with the License. You may obtain a copy of the License at
@@ -14,8 +14,8 @@
 # KIND, either express or implied. See the License for the specific language governing
 # permissions and limitations under the License.
 
-# File: git/hooks/install
-# Description: Git hooks install script for the toolchain-avr-gcc repository.
+# File: ci/format
+# Description: toolchain-avr-gcc repository CI formatting script.
 
 function error()
 {
@@ -38,32 +38,20 @@ function abort()
 function display_help_text()
 {
     echo "NAME"
-    echo "    $mnemonic - Install the toolchain-avr-gcc repository's Git hooks."
+    echo "    $mnemonic - Ensure formatting style is consistent."
     echo "SYNOPSIS"
     echo "    $mnemonic --help"
     echo "    $mnemonic --version"
-    echo "    $mnemonic --all"
-    echo "    $mnemonic [<hooks>]"
+    echo "    $mnemonic"
     echo "OPTIONS"
-    echo "    --all"
-    echo "        Install all supported hooks."
     echo "    --help"
     echo "        Display this help text."
     echo "    --version"
     echo "        Display the version of this script."
-    echo "    <hooks>"
-    echo "        The whitespace separated list of hooks to install. The following hooks"
-    echo "        are supported:"
-
-    for hook in "${supported_hooks[@]}"; do
-        echo "            $hook"
-    done
-
     echo "EXAMPLES"
     echo "    $mnemonic --help"
     echo "    $mnemonic --version"
-    echo "    $mnemonic --all"
-    echo "    $mnemonic ${supported_hooks[*]}"
+    echo "    $mnemonic"
 }
 
 function display_version()
@@ -71,50 +59,21 @@ function display_version()
     echo "$mnemonic, version $version"
 }
 
-function valid_hook()
+function ensure_formatting_style_is_consistent()
 {
-    local -r hook="$1"
+    local cpp_files; mapfile -t cpp_files < <( git -C "$repository" ls-files '*.h' '*.h.in' '*.c' '*.c.in' '*.cc' '*.cc.in' | xargs -r -d '\n' -I '{}' find "$repository/{}" ); readonly cpp_files
 
-    for supported_hook in "${supported_hooks[@]}"; do
-        if [[ "$hook" == "$supported_hook" ]]; then
-            return 0
-        fi
-    done
-
-    return 1
-}
-
-function validate_hooks()
-{
-    for hook in "${selected_hooks[@]}"; do
-        if ! valid_hook "$hook"; then
-            abort "'$hook' is not a supported hook"
-        fi
-    done
-}
-
-function install_hooks()
-{
-    for hook in "${selected_hooks[@]}"; do
-        rm -f "$repository/.git/hooks/$hook"
-
-        if ! ln -s "$hooks/$hook" "$repository/.git/hooks/$hook" > "/dev/null"; then
-            abort "'$hook' installation failure"
-        fi
-    done
+    if ! ( cd "$repository" && clang-format -i --verbose "${cpp_files[@]}" && git -C "$repository" diff --exit-code ); then
+        abort
+    fi
 }
 
 function main()
 {
     local -r script=$( readlink -f "$0" )
     local -r mnemonic=$( basename "$script" )
-    local -r hooks=$( dirname "$script" )
-    local -r repository=$( readlink -f "$hooks/../.." )
+    local -r repository=$( readlink -f "$( dirname "$script" )/.." )
     local -r version=$( git -C "$repository" describe --always --dirty --broken )
-
-    local supported_hooks; mapfile -t supported_hooks < <( git -C "$repository" ls-files 'git/hooks/' ':!:git/hooks/install' | xargs -r -d '\n' -I '{}' find "$repository/{}" -executable -printf '%f\n' ); readonly supported_hooks
-
-    local selected_hooks=()
 
     while [[ "$#" -gt 0 ]]; do
         local argument="$1"; shift
@@ -128,25 +87,18 @@ function main()
                 display_version
                 exit
                 ;;
-            --all)
-                selected_hooks=( "${supported_hooks[@]}" )
-                break
-                ;;
             --*)
                 ;&
             -*)
                 abort "'$argument' is not a supported option"
                 ;;
             *)
-                selected_hooks+=( "$argument" )
+                abort "'$argument' is not a valid argument"
                 ;;
         esac
     done
 
-    readonly selected_hooks
-
-    validate_hooks
-    install_hooks
+    ensure_formatting_style_is_consistent
 }
 
 main "$@"

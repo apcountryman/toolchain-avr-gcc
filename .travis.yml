@@ -1,6 +1,6 @@
 # toolchain-avr-gcc
 #
-# Copyright 2019, 2020 Andrew Countryman <apcountryman@gmail.com>
+# Copyright 2020 Andrew Countryman <apcountryman@gmail.com>
 #
 # Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
 # file except in compliance with the License. You may obtain a copy of the License at
@@ -12,8 +12,18 @@
 # KIND, either express or implied. See the License for the specific language governing
 # permissions and limitations under the License.
 
-# File: examples/CMakeLists.txt
-# Description: toolchain-avr-gcc examples CMake rules.
+# File: .travis.yml
+# Description: Travis CI build configuration for the toolchain-avr-gcc repository.
 
-# build the blink examples
-add_subdirectory( blink )
+os: linux
+dist: bionic
+
+jobs:
+    include:
+        - name: "format"
+          language: minimal
+          script: ./ci/format
+
+        - name: "analyze (static) - shellcheck"
+          language: bash
+          script: ./ci/analyze --analyzer shellcheck

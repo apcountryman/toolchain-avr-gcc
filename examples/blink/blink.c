@@ -1,7 +1,7 @@
 /**
- * picolibrary
+ * toolchain-avr-gcc
  *
- * Copyright 2019 Andrew Countryman <apcountryman@gmail.com>
+ * Copyright 2019, 2020 Andrew Countryman <apcountryman@gmail.com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -29,7 +29,7 @@
  *
  * \return The name of the I/O port's DDR register.
  */
-#define DDR_EXPAND( port_letter ) DDR ## port_letter
+#define DDR_EXPAND( port_letter ) DDR##port_letter
 
 /**
  * \brief Get the name of an I/O port's DDR register.
@@ -47,7 +47,7 @@
  *
  * \return The name of the I/O port's PIN register.
  */
-#define PIN_EXPAND( port_letter ) PIN ## port_letter
+#define PIN_EXPAND( port_letter ) PIN##port_letter
 
 /**
  * \brief Get the name of an I/O port's PIN register.
@@ -85,7 +85,8 @@
 /**
  * \brief The indicator blink period, in ms.
  */
-#define INDICATOR_BLINK_PERIOD_MS CONVERT_FREQUENCY_HZ_TO_PERIOD_MS( INDICATOR_BLINK_FREQUENCY_HZ )
+#define INDICATOR_BLINK_PERIOD_MS \
+    CONVERT_FREQUENCY_HZ_TO_PERIOD_MS( INDICATOR_BLINK_FREQUENCY_HZ )
 
 /**
  * \brief Blink the indicator.

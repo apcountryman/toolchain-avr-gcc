@@ -2,7 +2,7 @@
 
 # toolchain-avr-gcc
 #
-# Copyright 2019 Andrew Countryman <apcountryman@gmail.com>
+# Copyright 2019, 2020 Andrew Countryman <apcountryman@gmail.com>
 #
 # Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
 # file except in compliance with the License. You may obtain a copy of the License at
@@ -17,50 +17,74 @@
 # File: git/hooks/pre-commit
 # Description: Git pre-commit hook script for the toolchain-avr-gcc repository.
 
-function abort()
+function message()
 {
-    exit 1
+    local -r content="$1"
+
+    echo -n "$mnemonic: $content"
+}
+
+function errors_found()
+{
+    echo "error(s) found"
 }
 
 function error()
 {
-    local param_message; declare -r param_message="$1"
+    local -r message="$1"
 
-    ( >&2 echo "$MNEMONIC: $param_message" )
+    ( >&2 echo "$mnemonic: $message" )
 }
 
-function message()
+function abort()
 {
-    local param_content; declare -r param_content="$1"
+    if [[ "$#" -gt 0 ]]; then
+        local -r message="$1"
 
-    echo -n "$MNEMONIC: $param_content"
+        error "$message, aborting"
+    fi
+
+    exit 1
 }
 
 function display_help_text()
 {
     echo "NAME"
-    echo "    $MNEMONIC - Execute the toolchain-avr-gcc repository's Git pre-commit hook."
+    echo "    $mnemonic - Ensure:"
+    echo "        - Filenames are portable"
+    echo "        - No whitespace errors are present"
+    echo "        - No script errors are present"
+    echo "        - No build errors are present"
     echo "SYNOPSIS"
-    echo "    $MNEMONIC --help"
-    echo "    $MNEMONIC [--jobs <jobs>]"
+    echo "    $mnemonic --help"
+    echo "    $mnemonic --version"
+    echo "    $mnemonic [--jobs <jobs>]"
     echo "OPTIONS"
     echo "    --help"
     echo "        Display this help text."
     echo "    --jobs <jobs>"
-    echo "        Set the number of make jobs to use when building. If the number of jobs"
-    echo "        is not specified, nproc - 1 jobs will be used."
+    echo "        Specify the number of build jobs to use when building. If the number of"
+    echo "        jobs is not specified, 'nproc - 1' jobs will be used."
+    echo "    --version"
+    echo "        Display the version of this script."
     echo "EXAMPLES"
-    echo "    $MNEMONIC --help"
-    echo "    $MNEMONIC"
-    echo "    $MNEMONIC --jobs 1"
+    echo "    $mnemonic --help"
+    echo "    $mnemonic --version"
+    echo "    $mnemonic"
+    echo "    $mnemonic --jobs 1"
+}
+
+function display_version()
+{
+    echo "$mnemonic, version $version"
 }
 
 function ensure_filenames_are_portable()
 {
-    message "checking for non-portable (non-ASCII) filenames ............................... "
+    message "checking for non-portable (non-ASCII) filenames .............................. "
 
-    if [[ $( git diff --cached --name-only --diff-filter=A -z $AGAINST | LC_ALL=C tr -d '[ -~]\0' | wc -c ) != 0 ]]; then
-        echo "error(s) found"
+    if [[ $( git -C "$repository" diff --cached --name-only --diff-filter=A -z "$against" | LC_ALL=C tr -d '[ -~]\0' | wc -c ) != 0 ]]; then
+        errors_found
         error "aborting commit due to non-portable (non-ASCII) filename(s)"
         abort
     fi
@@ -70,193 +94,190 @@ function ensure_filenames_are_portable()
 
 function ensure_no_whitespace_errors_are_present()
 {
-    message "checking for whitespace errors ................................................ "
+    message "checking for whitespace errors ............................................... "
 
-    if ! git diff-index --check --cached $AGAINST -- >/dev/null 2>&1; then
-        echo "error(s) found"
+    if ! git -C "$repository" diff-index --check --cached "$against" -- > "/dev/null" 2>&1; then
+        errors_found
         error "aborting commit due to whitespace error(s), listed below"
-        git diff-index --check --cached $AGAINST --
+        git -C "$repository" diff-index --check --cached "$against" --
         abort
     fi
 
     echo "none"
 }
 
-function ensure_build_succeeds()
+function ensure_no_script_errors_are_present()
 {
-    local param_name;       declare -r param_name="$1"
-    local param_ellipsis;   declare -r param_ellipsis="$2"
-    local param_build_name; declare -r param_build_name="$3"
+    message "checking for script errors ................................................... "
 
-    local build_directory; declare -r build_directory="$REPOSITORY"/examples/build/"$param_build_name"
-    local cmake_options;   declare -r cmake_options="-C $REPOSITORY/examples/configuration/CMakeLists.txt.$param_build_name"
+    local scripts; mapfile -t scripts < <( git -C "$repository" ls-files | xargs -r -d '\n' -I '{}' find "$repository/{}" -executable ); readonly scripts
 
-    message "checking for build ($param_name) errors $param_ellipsis "
+    if ! shellcheck "${scripts[@]}" > "/dev/null" 2>&1; then
+        errors_found
+        error "aborting commit due to script error(s), listed below"
+        shellcheck "${scripts[@]}"
+        abort
+    fi
+
+    echo "none"
+}
+
+function ensure_no_build_errors_are_present()
+{
+    local -r build_type="$1"
+    local -r ellipsis="$2"
+
+    message "checking for ($build_type) build errors $ellipsis "
+
+    local -r toolchain_file="$repository/toolchain.cmake"
+    local -r build_directory="$repository/build/$build_type"
+    local -r build_configuration="$repository/configuration/CMakeLists.txt.$build_type"
 
     if [[ ! -d "$build_directory" ]]; then
-        if ! mkdir -p "$build_directory" >/dev/null 2>&1; then
-            echo "error(s) found"
-            error "aborting commit due to build ($param_name) directory creation error(s), listed below"
-            mkdir -p "$build_directory"
-            abort
-        fi
-
-        cd "$build_directory"
-
-        if ! cmake -DCMAKE_TOOLCHAIN_FILE="$REPOSITORY"/toolchain.cmake $cmake_options "$REPOSITORY"/examples >/dev/null 2>&1; then
-            echo "error(s) found"
-            error "aborting commit due to build ($param_name) CMake error(s), listed below"
-            rm -rf *
-            cmake -DCMAKE_TOOLCHAIN_FILE="$REPOSITORY"/toolchain.cmake $cmake_options "$REPOSITORY"/examples
+        if ! cmake -DCMAKE_TOOLCHAIN_FILE="$toolchain_file" -C "$build_configuration" -S "$repository" -B "$build_directory" > "/dev/null" 2>&1; then
+            errors_found
+            error "aborting commit due to ($build_type) build CMake initialization error(s), listed below"
+            rm -rf "$build_directory"
+            cmake -DCMAKE_TOOLCHAIN_FILE="$toolchain_file" -C "$build_configuration" -S "$repository" -B "$build_directory"
             abort
         fi
     fi
 
-    cd "$build_directory"
-
-    if ! cmake $cmake_options . >/dev/null 2>&1; then
-        echo "error(s) found"
-        error "aborting commit due to build ($param_name) CMake error(s), listed below"
-        cmake $cmake_options .
+    if ! cmake -C "$build_configuration" "$build_directory" > "/dev/null" 2>&1; then
+        errors_found
+        error "aborting commit due to ($build_type) build CMake configuration error(s), listed below"
+        cmake -C "$build_configuration" "$build_directory"
         abort
     fi
 
-    if ! make "$JOBS" --quiet >/dev/null 2>&1; then
-        echo "error(s) found"
-        error "aborting commit due to build ($param_name) make error(s), listed below"
-        make "$JOBS"
+    if ! cmake --build "$build_directory" -j "$build_jobs" > "/dev/null" 2>&1; then
+        errors_found
+        error "aborting commit due to ($build_type) build CMake build error(s), listed below"
+        cmake --build "$build_directory" -j "$build_jobs"
         abort
     fi
 
     echo "none"
 }
 
-function ensure_atmega2560_arduino_mega_2560_build_succeeds()
+function ensure_no_atmega2560_arduino_mega_2560_build_errors_are_present()
 {
-    local name;       declare -r name="ATmega2560, Arduino Mega 2560"
-    local ellipsis;   declare -r ellipsis="....................."
-    local build_name; declare -r build_name="atmega2560-arduino-mega-2560"
+    local -r build_type="atmega2560-arduino-mega-2560"
+    local -r ellipsis="....................."
 
-    ensure_build_succeeds "$name" "$ellipsis" "$build_name"
+    ensure_no_build_errors_are_present "$build_type" "$ellipsis"
 }
 
-function ensure_atmega328p_adafruit_feather_328p_build_succeeds()
+function ensure_no_atmega328p_adafruit_feather_328p_build_errors_are_present()
 {
-    local name;       declare -r name="ATmega328/P, Adafruit Feather 328P"
-    local ellipsis;   declare -r ellipsis="................"
-    local build_name; declare -r build_name="atmega328p-adafruit-feather-328p"
+    local -r build_type="atmega328p-adafruit-feather-328p"
+    local -r ellipsis="................."
 
-    ensure_build_succeeds "$name" "$ellipsis" "$build_name"
+    ensure_no_build_errors_are_present "$build_type" "$ellipsis"
 }
 
-function ensure_atmega328p_adafruit_metro_mini_build_succeeds()
+function ensure_no_atmega328p_adafruit_metro_mini_build_errors_are_present()
 {
-    local name;       declare -r name="ATmega328/P, Adafruit Metro Mini"
-    local ellipsis;   declare -r ellipsis=".................."
-    local build_name; declare -r build_name="atmega328p-adafruit-metro-mini"
+    local -r build_type="atmega328p-adafruit-metro-mini"
+    local -r ellipsis="..................."
 
-    ensure_build_succeeds "$name" "$ellipsis" "$build_name"
+    ensure_no_build_errors_are_present "$build_type" "$ellipsis"
 }
 
-function ensure_atmega328p_arduino_uno_build_succeeds()
+function ensure_no_atmega328p_arduino_uno_build_errors_are_present()
 {
-    local name;       declare -r name="ATmega328/P, Arduino Uno"
-    local ellipsis;   declare -r ellipsis=".........................."
-    local build_name; declare -r build_name="atmega328p-arduino-uno"
+    local -r build_type="atmega328p-arduino-uno"
+    local -r ellipsis="..........................."
 
-    ensure_build_succeeds "$name" "$ellipsis" "$build_name"
+    ensure_no_build_errors_are_present "$build_type" "$ellipsis"
 }
 
-function ensure_atmega32u4_adafruit_circuit_playground_classic_build_succeeds()
+function ensure_no_atmega32u4_adafruit_circuit_playground_classic_build_errors_are_present()
 {
-    local name;       declare -r name="ATmega32U4, Adafruit Circuit Playground Classic"
-    local ellipsis;   declare -r ellipsis="..."
-    local build_name; declare -r build_name="atmega32u4-adafruit-circuit-playground-classic"
+    local -r build_type="atmega32u4-adafruit-circuit-playground-classic"
+    local -r ellipsis="..."
 
-    ensure_build_succeeds "$name" "$ellipsis" "$build_name"
+    ensure_no_build_errors_are_present "$build_type" "$ellipsis"
 }
 
-function ensure_atmega32u4_adafruit_feather_32u4_adalogger_build_succeeds()
+function ensure_no_atmega32u4_adafruit_feather_32u4_adalogger_build_errors_are_present()
 {
-    local name;       declare -r name="ATmega32U4, Adafruit Feather 32u4 Adalogger"
-    local ellipsis;   declare -r ellipsis="......."
-    local build_name; declare -r build_name="atmega32u4-adafruit-feather-32u4-adalogger"
+    local -r build_type="atmega32u4-adafruit-feather-32u4-adalogger"
+    local -r ellipsis="......."
 
-    ensure_build_succeeds "$name" "$ellipsis" "$build_name"
+    ensure_no_build_errors_are_present "$build_type" "$ellipsis"
 }
 
-function ensure_atmega32u4_adafruit_feather_32u4_adalogger_build_succeeds()
+function ensure_no_atmega32u4_adafruit_feather_32u4_basic_proto_build_errors_are_present()
 {
-    local name;       declare -r name="ATmega32U4, Adafruit Feather 32u4 Adalogger"
-    local ellipsis;   declare -r ellipsis="......."
-    local build_name; declare -r build_name="atmega32u4-adafruit-feather-32u4-adalogger"
+    local -r build_type="atmega32u4-adafruit-feather-32u4-basic-proto"
+    local -r ellipsis="....."
 
-    ensure_build_succeeds "$name" "$ellipsis" "$build_name"
-}
-
-function ensure_atmega32u4_adafruit_feather_32u4_basic_proto_build_succeeds()
-{
-    local name;       declare -r name="ATmega32U4, Adafruit Feather 32u4 Basic Proto"
-    local ellipsis;   declare -r ellipsis="....."
-    local build_name; declare -r build_name="atmega32u4-adafruit-feather-32u4-basic-proto"
-
-    ensure_build_succeeds "$name" "$ellipsis" "$build_name"
+    ensure_no_build_errors_are_present "$build_type" "$ellipsis"
 }
 
 function main()
 {
-    declare -r SCRIPT=$( readlink -f $0 )
-    declare -r REPOSITORY=$( dirname $SCRIPT )/../..
-    declare -r MNEMONIC=$( basename $SCRIPT )
+    local -r script=$( readlink -f "$0" )
+    local -r mnemonic=$( basename "$script" )
+    local -r hooks=$( dirname "$script" )
+    local -r repository=$( readlink -f "$hooks/../.." )
+    local -r version=$( git -C "$repository" describe --always --dirty --broken )
 
-    JOBS="-j$(( $( nproc ) - 1 ))"
+    while [[ "$#" -gt 0 ]]; do
+        local argument="$1"; shift
 
-    while [[ $# -gt 0 ]]; do
-        local argument; argument="$1"
-        shift
-
-        case $argument in
+        case "$argument" in
             --help)
                 display_help_text
                 exit
                 ;;
+            --version)
+                display_version
+                exit
+                ;;
             --jobs)
-                if [[ $# -eq 0 ]]; then
-                    error "job count not specified, aborting"
-                    abort
+                if [[ -n "$build_jobs" ]]; then
+                    abort "build job count already specified"
                 fi
 
-                JOBS="-j$1"
-                shift
+                if [[ "$#" -le 0 ]]; then
+                    abort "build job count not specified"
+                fi
+
+                local -r build_jobs="$1"; shift
                 ;;
             --*)
                 ;&
             -*)
-                error "'$argument' is not a supported option, aborting"
-                abort
+                abort "'$argument' is not a supported option"
                 ;;
             *)
-                error "'$argument' is not a valid argument, aborting"
-                abort
+                abort "'$argument' is not a valid argument"
                 ;;
         esac
     done
 
-    if git rev-parse --verify HEAD >/dev/null 2>&1; then
-        declare -r AGAINST=HEAD
+    if git -C "$repository" rev-parse --verify HEAD > "/dev/null" 2>&1; then
+        local -r against=HEAD
     else
-        declare -r AGAINST=$( git hash-object -t tree /dev/null )
+        local -r against=$( git hash-object -t tree "/dev/null" )
+    fi
+
+    if [[ -z "$build_jobs" ]]; then
+        local -r build_jobs=$(( $( nproc ) - 1 ))
     fi
 
     ensure_filenames_are_portable
     ensure_no_whitespace_errors_are_present
-    ensure_atmega2560_arduino_mega_2560_build_succeeds
-    ensure_atmega328p_adafruit_feather_328p_build_succeeds
-    ensure_atmega328p_adafruit_metro_mini_build_succeeds
-    ensure_atmega328p_arduino_uno_build_succeeds
-    ensure_atmega32u4_adafruit_circuit_playground_classic_build_succeeds
-    ensure_atmega32u4_adafruit_feather_32u4_adalogger_build_succeeds
-    ensure_atmega32u4_adafruit_feather_32u4_basic_proto_build_succeeds
+    ensure_no_script_errors_are_present
+    ensure_no_atmega2560_arduino_mega_2560_build_errors_are_present
+    ensure_no_atmega328p_adafruit_feather_328p_build_errors_are_present
+    ensure_no_atmega328p_adafruit_metro_mini_build_errors_are_present
+    ensure_no_atmega328p_arduino_uno_build_errors_are_present
+    ensure_no_atmega32u4_adafruit_circuit_playground_classic_build_errors_are_present
+    ensure_no_atmega32u4_adafruit_feather_32u4_adalogger_build_errors_are_present
+    ensure_no_atmega32u4_adafruit_feather_32u4_basic_proto_build_errors_are_present
 }
 
 main "$@"

@@ -1,7 +1,21 @@
 # toolchain-avr-gcc Change Log
+All notable changes to this project are documented in this file.
+The format is based on [keep a changelog](https://keepachangelog.com/en/1.0.0/).
+This project adheres to [Semantic Versioning](https://semver.org/).
 UTC is used when determining release dates.
 
 ## [Unreleased](https://github.com/apcountryman/toolchain-avr-gcc/compare/master...develop)
+
+## [0.3.0](https://github.com/apcountryman/toolchain-avr-gcc/compare/0.2.1...0.3.0) - 2020-05-26
+### Added
+- [Script error checks](https://github.com/apcountryman/toolchain-avr-gcc/issues/18).
+- [`clang-format` formatting CI job](https://github.com/apcountryman/toolchain-avr-gcc/issues/25).
+
+### Changed
+- [Simplify examples directory structure](https://github.com/apcountryman/toolchain-avr-gcc/issues/19).
+- [Update `CHANGELOG` front matter](https://github.com/apcountryman/toolchain-avr-gcc/issues/20).
+- [Update `README` formatting](https://github.com/apcountryman/toolchain-avr-gcc/issues/21).
+- [Cleanup toolchain](https://github.com/apcountryman/toolchain-avr-gcc/issues/22).
 
 ## [0.2.1](https://github.com/apcountryman/toolchain-avr-gcc/compare/0.2.0...0.2.1) - 2019-10-13
 ### Fixed
@@ -12,7 +26,7 @@ UTC is used when determining release dates.
 - [Examples build system infrastructure](https://github.com/apcountryman/toolchain-avr-gcc/issues/5).
 - [Blink examples](https://github.com/apcountryman/toolchain-avr-gcc/issues/6).
 
-## [0.1.0](https://github.com/apcountryman/toolchain-avr-gcc/compare/7f91b3063d4e921bbb756794eebf4f422cee1cac...0.1.0) - 2019-10-05
+## [0.1.0](https://github.com/apcountryman/toolchain-avr-gcc/compare/0.0.0...0.1.0) - 2019-10-05
 ### Added
 - Repository Git ignore rules.
 - Repository Git hooks install script.

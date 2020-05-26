@@ -1,6 +1,6 @@
 # toolchain-avr-gcc
 #
-# Copyright 2019 Andrew Countryman <apcountryman@gmail.com>
+# Copyright 2019, 2020 Andrew Countryman <apcountryman@gmail.com>
 #
 # Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
 # file except in compliance with the License. You may obtain a copy of the License at
@@ -12,8 +12,8 @@
 # KIND, either express or implied. See the License for the specific language governing
 # permissions and limitations under the License.
 
-# File: examples/configuration/CMakeLists.txt.atmega32u4-adafruit-circuit-playground-classic
-# Description: ATmega32U4 Adafruit Circuit Playground Classic toolchain-avr-gcc examples
+# File: configuration/CMakeLists.txt.atmega32u4-adafruit-feather-32u4-basic-proto
+# Description: ATmega32U4 Adafruit Feather 32u4 Basic Proto toolchain-avr-gcc
 #       configuration.
 
 # CMake build type configuration
