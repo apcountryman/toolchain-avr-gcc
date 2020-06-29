@@ -307,23 +307,23 @@ function( add_avrdude_programming_targets executable )
 
     add_custom_target(
         "${executable}-program-flash"
-        COMMAND "${CMAKE_AVRDUDE}" "${avrdude_program_flash_arguments}" -U "flash:w:${executable}.flash.hex"
+        COMMAND "${CMAKE_AVRDUDE}" ${avrdude_program_flash_arguments} -U "flash:w:${executable}.flash.hex"
         DEPENDS "${executable}.flash.hex"
     )
     add_custom_target(
         "${executable}-verify-flash"
-        COMMAND "${CMAKE_AVRDUDE}" "${avrdude_verify_flash_arguments}" -U "flash:v:${executable}.flash.hex"
+        COMMAND "${CMAKE_AVRDUDE}" ${avrdude_verify_flash_arguments} -U "flash:v:${executable}.flash.hex"
         DEPENDS "${executable}.flash.hex"
     )
 
     add_custom_target(
         "${executable}-program-eeprom"
-        COMMAND "${CMAKE_AVRDUDE}" "${avrdude_program_eeprom_arguments}" -U "eeprom:w:${executable}.eeprom.hex"
+        COMMAND "${CMAKE_AVRDUDE}" ${avrdude_program_eeprom_arguments} -U "eeprom:w:${executable}.eeprom.hex"
         DEPENDS "${executable}.eeprom.hex"
     )
     add_custom_target(
         "${executable}-verify-eeprom"
-        COMMAND "${CMAKE_AVRDUDE}" "${avrdude_verify_eeprom_arguments}" -U "eeprom:v:${executable}.eeprom.hex"
+        COMMAND "${CMAKE_AVRDUDE}" ${avrdude_verify_eeprom_arguments} -U "eeprom:v:${executable}.eeprom.hex"
         DEPENDS "${executable}.eeprom.hex"
     )
 endfunction( add_avrdude_programming_targets )
