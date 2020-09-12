@@ -98,10 +98,10 @@ set(
     -DF_CPU=${ATMEL_AVR_F_CPU}UL \
     "
 )
+set( CMAKE_CXC_STANDARD 17 )
 set(
     CMAKE_CXX_FLAGS
     "${CMAKE_CXX_FLAGS} \
-    -std=c++17 \
     -Werror -Wall -Wextra \
     -Wcast-align=strict \
     -Wcast-qual \
