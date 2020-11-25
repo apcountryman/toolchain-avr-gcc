@@ -14,8 +14,8 @@
 # KIND, either express or implied. See the License for the specific language governing
 # permissions and limitations under the License.
 
-# File: ci/format
-# Description: toolchain-avr-gcc repository CI formatting script.
+# File: utility/format
+# Description: toolchain-avr-gcc formatting script.
 
 function error()
 {

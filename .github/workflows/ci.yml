@@ -1,4 +1,4 @@
-# toolchain-avr-gcc
+# cmake-utilities
 #
 # Copyright 2020 Andrew Countryman <apcountryman@gmail.com>
 #
@@ -12,18 +12,19 @@
 # KIND, either express or implied. See the License for the specific language governing
 # permissions and limitations under the License.
 
-# File: .travis.yml
-# Description: Travis CI build configuration for the toolchain-avr-gcc repository.
+# File: .github/workflows/ci.yml
+# Description: GitHub Actions CI workflow for the toolchain-avr-gcc repository.
 
-os: linux
-dist: bionic
+name: CI
+
+on: [ push, pull_request ]
 
 jobs:
-    include:
-        - name: "format"
-          language: minimal
-          script: ./ci/format
-
-        - name: "analyze (static) - shellcheck"
-          language: bash
-          script: ./ci/analyze --analyzer shellcheck
+    analyze-static-shellcheck:
+        name: Analyze (static) - shellcheck
+        runs-on: ubuntu-20.04
+        steps:
+            - uses: actions/checkout@v2
+            - name: Analyze
+              shell: bash
+              run: ./ci/analyze --analyzer shellcheck
