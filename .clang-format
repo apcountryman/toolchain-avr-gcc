@@ -17,7 +17,7 @@
 # Description: clang-format style configuration for the toolchain-avr-gcc repository.
 
 Language: Cpp
-Standard: Cpp11
+Standard: c++17
 
 BasedOnStyle: Google
 
@@ -26,13 +26,13 @@ DisableFormat: false
 # general
 BraceWrapping:
     AfterClass: false
-    AfterControlStatement: false
+    AfterControlStatement: Never
     AfterEnum: false
+    AfterExternBlock: false
     AfterFunction: true
     AfterNamespace: false
     AfterStruct: false
     AfterUnion: false
-    AfterExternBlock: false
     BeforeCatch: false
     BeforeElse: false
     IndentBraces: false
@@ -40,19 +40,23 @@ BraceWrapping:
 BreakBeforeBraces: Custom
 ColumnLimit: 90
 ContinuationIndentWidth: 4
+DeriveLineEnding: false
 IndentWidth: 4
 SpaceBeforeParens: ControlStatements
 SpaceInEmptyParentheses: false
 SpacesInParentheses: true
 TabWidth: 4
+UseCRLF: false
 UseTab: Never
 
 # preprocessor
+AlignConsecutiveMacros: true
 AlignEscapedNewlines: Left
 ForEachMacros:
 IncludeBlocks: Regroup
 IncludeCategories:
 IncludeIsMainRegex: ""
+IncludeIsMainSourceRegex: ""
 IndentPPDirectives: None
 MacroBlockBegin: ""
 MacroBlockEnd: ""
@@ -62,18 +66,23 @@ SortIncludes: true
 CompactNamespaces: true
 FixNamespaceComments: true
 NamespaceIndentation: None
+NamespaceMacros:
 
 # templates
-AlwaysBreakTemplateDeclarations: true
+AlwaysBreakTemplateDeclarations: Yes
 SpaceAfterTemplateKeyword: false
 SpacesInAngles: false
 
 # classes/structs
 AccessModifierOffset: -2
-BreakBeforeInheritanceComma: true
+AllowAllConstructorInitializersOnNextLine: false
 BreakConstructorInitializers: AfterColon
+BreakInheritanceList: AfterColon
 ConstructorInitializerAllOnOneLineOrOnePerLine: true
 ConstructorInitializerIndentWidth: 4
+SpaceBeforeCtorInitializerColon: true
+SpaceBeforeInheritanceColon: true
+TypenameMacros:
 
 # function declarations/definitions
 AllowAllParametersOfDeclarationOnNextLine: false
@@ -84,6 +93,7 @@ IndentWrappedFunctionNames: false
 
 # function calls
 AlignAfterOpenBracket: AlwaysBreak
+AllowAllArgumentsOnNextLine: true
 BinPackArguments: false
 
 # declarations/expressions/statements
@@ -92,7 +102,8 @@ AlignConsecutiveDeclarations: true
 AlignOperands: true
 AllowShortBlocksOnASingleLine: true
 AllowShortCaseLabelsOnASingleLine: true
-AllowShortIfStatementsOnASingleLine: true
+AllowShortIfStatementsOnASingleLine: Never
+AllowShortLambdasOnASingleLine: All
 AllowShortLoopsOnASingleLine: true
 AlwaysBreakBeforeMultilineStrings: true
 BreakBeforeBinaryOperators: NonAssignment
@@ -101,13 +112,23 @@ BreakStringLiterals: true
 Cpp11BracedListStyle: false
 DerivePointerAlignment: false
 IndentCaseLabels: true
+IndentGotoLabels: true
 KeepEmptyLinesAtTheStartOfBlocks: false
 MaxEmptyLinesToKeep: 1
 PointerAlignment: Middle
 RawStringFormats:
 SortUsingDeclarations: true
+SpaceAfterCStyleCast: false
+SpaceAfterLogicalNot: false
 SpaceBeforeAssignmentOperators: true
+SpaceBeforeCpp11BracedList: false
+SpaceBeforeRangeBasedForLoopColon: true
+SpaceBeforeSquareBrackets: false
+SpaceInEmptyBlock: false
+SpacesInCStyleCastParentheses: false
+SpacesInConditionalStatement: true
 SpacesInSquareBrackets: true
+StatementMacros:
 
 # comments
 AlignTrailingComments: true
@@ -118,8 +139,9 @@ SpacesBeforeTrailingComments: 1
 # penalties
 PenaltyBreakAssignment: 99
 PenaltyBreakBeforeFirstCallParameter: 0
-PenaltyBreakComment: 0
+PenaltyBreakComment: 99
 PenaltyBreakFirstLessLess: 99
 PenaltyBreakString: 0
+PenaltyBreakTemplateDeclaration: 0
 PenaltyExcessCharacter: 1
 PenaltyReturnTypeOnItsOwnLine: 99
