@@ -132,7 +132,7 @@ function ensure_no_build_errors_are_present()
 
     local -r toolchain_file="$repository/toolchain.cmake"
     local -r build_directory="$repository/build/$build_type"
-    local -r build_configuration="$repository/configuration/CMakeLists.txt.$build_type"
+    local -r build_configuration="$repository/configuration/$build_type/CMakeLists.txt"
 
     if [[ ! -d "$build_directory" ]]; then
         if ! cmake -DCMAKE_TOOLCHAIN_FILE="$toolchain_file" -C "$build_configuration" -S "$repository" -B "$build_directory" > "/dev/null" 2>&1; then

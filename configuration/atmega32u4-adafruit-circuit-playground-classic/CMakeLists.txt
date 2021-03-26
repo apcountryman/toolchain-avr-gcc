@@ -13,30 +13,31 @@
 # KIND, either express or implied. See the License for the specific language governing
 # permissions and limitations under the License.
 
-# File: configuration/CMakeLists.txt.atmega328p-arduino-uno
-# Description: ATmega328/P Arduino Uno toolchain-avr-gcc configuration.
+# File: configuration/CMakeLists.txt.atmega32u4-adafruit-circuit-playground-classic
+# Description: ATmega32U4 Adafruit Circuit Playground Classic toolchain-avr-gcc
+#       configuration.
 
 # CMake build type configuration
 set( CMAKE_BUILD_TYPE "MinSizeRel" CACHE STRING "" FORCE )
 mark_as_advanced( CMAKE_BUILD_TYPE )
 
 # Microchip AVR configuration
-set( MICROCHIP_AVR_MCU   "atmega328p" CACHE STRING "" FORCE )
-set( MICROCHIP_AVR_F_CPU "16000000"   CACHE STRING "" FORCE )
+set( MICROCHIP_AVR_MCU   "atmega32u4" CACHE STRING "" FORCE )
+set( MICROCHIP_AVR_F_CPU "8000000"    CACHE STRING "" FORCE )
 mark_as_advanced(
     MICROCHIP_AVR_MCU
     MICROCHIP_AVR_F_CPU
 )
 
 # avrdude configuration
-set( AVRDUDE_BAUD_RATE                             "115200"     CACHE STRING "" FORCE )
+set( AVRDUDE_BAUD_RATE                             "57600"      CACHE STRING "" FORCE )
 set( AVRDUDE_BIT_CLOCK                             ""           CACHE STRING "" FORCE )
 set( AVRDUDE_DELAY                                 ""           CACHE STRING "" FORCE )
 set( AVRDUDE_DISABLE_AUTOMATIC_FLASH_ERASE_ENABLED ON           CACHE BOOL   "" FORCE )
 set( AVRDUDE_EXIT_SPECIFICATION                    ""           CACHE STRING "" FORCE )
 set( AVRDUDE_EXTENDED_PARAMETERS                   ""           CACHE STRING "" FORCE )
-set( AVRDUDE_PART                                  "atmega328p" CACHE STRING "" FORCE )
-set( AVRDUDE_PROGRAMMER                            "arduino"    CACHE STRING "" FORCE )
+set( AVRDUDE_PART                                  "atmega32u4" CACHE STRING "" FORCE )
+set( AVRDUDE_PROGRAMMER                            "avr109"     CACHE STRING "" FORCE )
 mark_as_advanced(
     AVRDUDE_BAUD_RATE
     AVRDUDE_BIT_CLOCK
@@ -48,12 +49,4 @@ mark_as_advanced(
     AVRDUDE_PROGRAMMER
 )
 
-# blink examples configuration
-set( EXAMPLES_BLINK_ENABLED               ON  CACHE BOOL   "" FORCE )
-set( EXAMPLES_BLINK_INDICATOR_PORT_LETTER "B" CACHE STRING "" FORCE )
-set( EXAMPLES_BLINK_INDICATOR_PIN_NUMBER  "5" CACHE STRING "" FORCE )
-mark_as_advanced(
-    EXAMPLES_BLINK_ENABLED
-    EXAMPLES_BLINK_INDICATOR_PORT_LETTER
-    EXAMPLES_BLINK_INDICATOR_PIN_NUMBER
-)
+include( "${CMAKE_CURRENT_LIST_DIR}/examples/blink/CMakeLists.txt" )
