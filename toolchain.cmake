@@ -24,7 +24,7 @@ mark_as_advanced(
 )
 
 set( CMAKE_SYSTEM_NAME      "Generic"   )
-set( CMAKE_SYSTEM_PROCESSOR "Atmel-AVR" )
+set( CMAKE_SYSTEM_PROCESSOR "Microchip-AVR" )
 
 find_program( CMAKE_C_COMPILER avr-gcc )
 mark_as_advanced( CMAKE_C_COMPILER )
