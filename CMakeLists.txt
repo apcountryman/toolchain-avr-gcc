@@ -22,9 +22,9 @@ project(
     LANGUAGES C CXX
 )
 
-# Atmel AVR configuration
-set( ATMEL_AVR_MCU   "" CACHE STRING "Atmel AVR: MCU"                  )
-set( ATMEL_AVR_F_CPU "" CACHE STRING "Atmel AVR: MCU frequency, in Hz" )
+# Microchip AVR configuration
+set( MICROCHIP_AVR_MCU   "" CACHE STRING "Microchip AVR: MCU"                  )
+set( MICROCHIP_AVR_F_CPU "" CACHE STRING "Microchip AVR: MCU frequency, in Hz" )
 
 # avrdude configuration
 option( AVRDUDE_ALWAYS_RECOVER_FUSES_ENABLED          "avrdude: always recover fuses"          OFF )
@@ -95,8 +95,8 @@ set(
     -Wshadow \
     -Wstrict-prototypes \
     -Wunsafe-loop-optimizations \
-    -mmcu=${ATMEL_AVR_MCU} \
-    -DF_CPU=${ATMEL_AVR_F_CPU}UL \
+    -mmcu=${MICROCHIP_AVR_MCU} \
+    -DF_CPU=${MICROCHIP_AVR_F_CPU}UL \
     "
 )
 set( CMAKE_CXX_STANDARD 17 )
@@ -118,8 +118,8 @@ set(
     -Wpointer-arith \
     -Wshadow \
     -Wunsafe-loop-optimizations \
-    -mmcu=${ATMEL_AVR_MCU} \
-    -DF_CPU=${ATMEL_AVR_F_CPU} \
+    -mmcu=${MICROCHIP_AVR_MCU} \
+    -DF_CPU=${MICROCHIP_AVR_F_CPU} \
     "
 )
 

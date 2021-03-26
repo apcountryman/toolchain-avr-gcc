@@ -1,8 +1,8 @@
 # toolchain-avr-gcc
 ![CI](https://github.com/apcountryman/toolchain-avr-gcc/workflows/CI/badge.svg)
 
-`toolchain-avr-gcc` is a CMake toolchain for cross compiling for the Atmel AVR family of
-microcontrollers using avr-gcc.
+`toolchain-avr-gcc` is a CMake toolchain for cross compiling for the Microchip AVR family
+of microcontrollers using avr-gcc.
 In addition to configuring CMake for cross compiling with avr-gcc, the toolchain provides
 an optional function that acts as a wrapper of avrdude for programming and verifying the
 microcontroller's Flash and/or EEPROM.

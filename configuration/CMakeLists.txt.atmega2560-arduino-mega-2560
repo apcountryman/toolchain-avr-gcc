@@ -20,12 +20,12 @@
 set( CMAKE_BUILD_TYPE "MinSizeRel" CACHE STRING "" FORCE )
 mark_as_advanced( CMAKE_BUILD_TYPE )
 
-# Atmel AVR configuration
-set( ATMEL_AVR_MCU   "atmega2560" CACHE STRING "" FORCE )
-set( ATMEL_AVR_F_CPU "16000000"   CACHE STRING "" FORCE )
+# Microchip AVR configuration
+set( MICROCHIP_AVR_MCU   "atmega2560" CACHE STRING "" FORCE )
+set( MICROCHIP_AVR_F_CPU "16000000"   CACHE STRING "" FORCE )
 mark_as_advanced(
-    ATMEL_AVR_MCU
-    ATMEL_AVR_F_CPU
+    MICROCHIP_AVR_MCU
+    MICROCHIP_AVR_F_CPU
 )
 
 # avrdude configuration
