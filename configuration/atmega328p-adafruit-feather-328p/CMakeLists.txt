@@ -13,7 +13,7 @@
 # KIND, either express or implied. See the License for the specific language governing
 # permissions and limitations under the License.
 
-# File: configuration/CMakeLists.txt.atmega328p-adafruit-feather-328p
+# File: configuration/atmega328p-adafruit-feather-328p/CMakeLists.txt
 # Description: ATmega328/P Adafruit Feather 328P toolchain-avr-gcc configuration.
 
 # CMake build type configuration

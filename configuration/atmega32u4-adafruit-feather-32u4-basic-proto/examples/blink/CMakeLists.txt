@@ -13,7 +13,7 @@
 # KIND, either express or implied. See the License for the specific language governing
 # permissions and limitations under the License.
 
-# File: configuration/CMakeLists.txt.atmega32u4-adafruit-feather-32u4-basic-proto
+# File: configuration/atmega32u4-adafruit-feather-32u4-basic-proto/examples/blink/CMakeLists.txt
 # Description: ATmega32U4 Adafruit Feather 32u4 Basic Proto toolchain-avr-gcc blink
 #       examples configuration.
 

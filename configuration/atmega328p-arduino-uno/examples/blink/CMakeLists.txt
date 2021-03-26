@@ -13,7 +13,7 @@
 # KIND, either express or implied. See the License for the specific language governing
 # permissions and limitations under the License.
 
-# File: configuration/CMakeLists.txt.atmega328p-arduino-uno
+# File: configuration/atmega328p-arduino-uno/examples/blink/CMakeLists.txt
 # Description: ATmega328/P Arduino Uno toolchain-avr-gcc blink examples configuration.
 
 set( EXAMPLES_BLINK_ENABLED               ON  CACHE BOOL   "" FORCE )

@@ -13,7 +13,7 @@
 # KIND, either express or implied. See the License for the specific language governing
 # permissions and limitations under the License.
 
-# File: configuration/CMakeLists.txt.atmega32u4-adafruit-feather-32u4-adalogger
+# File: configuration/atmega32u4-adafruit-feather-32u4-adalogger/CMakeLists.txt
 # Description: ATmega32U4 Adafruit Feather 32u4 Adalogger toolchain-avr-gcc configuration.
 
 # CMake build type configuration

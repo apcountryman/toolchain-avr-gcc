@@ -13,7 +13,7 @@
 # KIND, either express or implied. See the License for the specific language governing
 # permissions and limitations under the License.
 
-# File: configuration/CMakeLists.txt.atmega32u4-adafruit-circuit-playground-classic
+# File: configuration/atmega32u4-adafruit-circuit-playground-classic/CMakeLists.txt
 # Description: ATmega32U4 Adafruit Circuit Playground Classic toolchain-avr-gcc
 #       configuration.
 

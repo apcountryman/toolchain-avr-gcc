@@ -13,7 +13,7 @@
 # KIND, either express or implied. See the License for the specific language governing
 # permissions and limitations under the License.
 
-# File: configuration/CMakeLists.txt.atmega328p-adafruit-metro-mini
+# File: configuration/atmega328p-adafruit-metro-mini/examples/blink/CMakeLists.txt
 # Description: ATmega328/P Adafruit Metro Mini toolchain-avr-gcc blink examples
 #       configuration.
 
