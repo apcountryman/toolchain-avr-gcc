@@ -13,7 +13,7 @@
 # KIND, either express or implied. See the License for the specific language governing
 # permissions and limitations under the License.
 
-# File: configuration/CMakeLists.txt.atmega328p-arduino-uno
+# File: configuration/atmega328p-arduino-uno/CMakeLists.txt
 # Description: ATmega328/P Arduino Uno toolchain-avr-gcc configuration.
 
 # CMake build type configuration
@@ -48,12 +48,4 @@ mark_as_advanced(
     AVRDUDE_PROGRAMMER
 )
 
-# blink examples configuration
-set( EXAMPLES_BLINK_ENABLED               ON  CACHE BOOL   "" FORCE )
-set( EXAMPLES_BLINK_INDICATOR_PORT_LETTER "B" CACHE STRING "" FORCE )
-set( EXAMPLES_BLINK_INDICATOR_PIN_NUMBER  "5" CACHE STRING "" FORCE )
-mark_as_advanced(
-    EXAMPLES_BLINK_ENABLED
-    EXAMPLES_BLINK_INDICATOR_PORT_LETTER
-    EXAMPLES_BLINK_INDICATOR_PIN_NUMBER
-)
+include( "${CMAKE_CURRENT_LIST_DIR}/examples/blink/CMakeLists.txt" )

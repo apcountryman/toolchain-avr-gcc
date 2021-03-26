@@ -13,8 +13,8 @@
 # KIND, either express or implied. See the License for the specific language governing
 # permissions and limitations under the License.
 
-# File: configuration/CMakeLists.txt.atmega32u4-adafruit-feather-32u4-basic-proto
-# Description: ATmega32U4 Adafruit Feather 32u4 Basic Proto toolchain-avr-gcc
+# File: configuration/atmega32u4-adafruit-circuit-playground-classic/CMakeLists.txt
+# Description: ATmega32U4 Adafruit Circuit Playground Classic toolchain-avr-gcc
 #       configuration.
 
 # CMake build type configuration
@@ -49,12 +49,4 @@ mark_as_advanced(
     AVRDUDE_PROGRAMMER
 )
 
-# blink examples configuration
-set( EXAMPLES_BLINK_ENABLED               ON  CACHE BOOL   "" FORCE )
-set( EXAMPLES_BLINK_INDICATOR_PORT_LETTER "C" CACHE STRING "" FORCE )
-set( EXAMPLES_BLINK_INDICATOR_PIN_NUMBER  "7" CACHE STRING "" FORCE )
-mark_as_advanced(
-    EXAMPLES_BLINK_ENABLED
-    EXAMPLES_BLINK_INDICATOR_PORT_LETTER
-    EXAMPLES_BLINK_INDICATOR_PIN_NUMBER
-)
+include( "${CMAKE_CURRENT_LIST_DIR}/examples/blink/CMakeLists.txt" )
