@@ -1,5 +1,5 @@
 # toolchain-avr-gcc
-![CI](https://github.com/apcountryman/toolchain-avr-gcc/workflows/CI/badge.svg)
+[![CI](https://github.com/apcountryman/toolchain-avr-gcc/actions/workflows/ci.yml/badge.svg)](https://github.com/apcountryman/toolchain-avr-gcc/actions/workflows/ci.yml)
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.0-4baaaa.svg)](CODE_OF_CONDUCT.md)
 
 `toolchain-avr-gcc` is a CMake toolchain for cross compiling for the Microchip AVR family
