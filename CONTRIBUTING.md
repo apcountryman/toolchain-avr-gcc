@@ -18,9 +18,9 @@ Use your best judgment.
 - [Style-guide](#style-guide)
 
 # I have a question
-If you have a question, please review the relevant toolchain documentation, and
+If you have a question, please review the relevant project documentation, and
 search/browse existing issues.
-If you have not found an answer to your question after reviewing the relevant toolchain
+If you have not found an answer to your question after reviewing the relevant project
 documentation and searching/browsing existing issues, please use the `question` issue
 template to open an issue to ask your question.
 
