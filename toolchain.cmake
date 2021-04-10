@@ -109,6 +109,7 @@ mark_as_advanced( CMAKE_AVRDUDE )
 #         [DISABLE_AUTOMATIC_VERIFY]
 #         [DISABLE_FUSE_CHECKS]
 #         [DISABLE_WRITES]
+#         [ERASE_CHIP]
 #         [OVERRIDE_SIGNATURE_CHECK]
 #         [BAUD_RATE <baud_rate>]
 #         [BIT_CLOCK <bit_clock>]
@@ -140,6 +141,8 @@ mark_as_advanced( CMAKE_AVRDUDE )
 #         Equivalent to avrdude's "-u" option. Only affects "-program-" targets.
 #     DISABLE_WRITES
 #         Equivalent to avrdude's "-n" option. Only affects "-program-" targets.
+#     ERASE_CHIP
+#         Equivalent to avrdude's "-e" option. Only affects the "-program-flash" target.
 #     EXIT_SPECIFICATION <exit_specification>
 #         Equivalent to avrdude's "-E <exit_specification>" option.
 #     EXTENDED_PARAMETERS <extended_parameters>
@@ -182,7 +185,7 @@ function( add_avrdude_programming_targets executable )
 
     cmake_parse_arguments(
         add_avrdude_programming_targets
-        "ALWAYS_RECOVER_FUSES;DISABLE_AUTOMATIC_FLASH_ERASE;DISABLE_AUTOMATIC_VERIFY;DISABLE_FUSE_CHECKS;DISABLE_WRITES;OVERRIDE_SIGNATURE_CHECK"
+        "ALWAYS_RECOVER_FUSES;DISABLE_AUTOMATIC_FLASH_ERASE;DISABLE_AUTOMATIC_VERIFY;DISABLE_FUSE_CHECKS;DISABLE_WRITES;ERASE_CHIP;OVERRIDE_SIGNATURE_CHECK"
         "BAUD_RATE;BIT_CLOCK;CONFIGURATION_FILE;DELAY;EXIT_SPECIFICATION;EXTENDED_PARAMETERS;PART;PORT;PROGRAMMER;VERBOSITY"
         ""
         ${ARGN}
@@ -242,6 +245,10 @@ function( add_avrdude_programming_targets executable )
     if( ${add_avrdude_programming_targets_DISABLE_WRITES} )
         list( APPEND avrdude_program_arguments "-n" )
     endif( ${add_avrdude_programming_targets_DISABLE_WRITES} )
+
+    if( ${add_avrdude_programming_targets_ERASE_CHIP} )
+        list( APPEND avrdude_program_flash_arguments "-e" )
+    endif( ${add_avrdude_programming_targets_ERASE_CHIP} )
 
     if( ${add_avrdude_programming_targets_OVERRIDE_SIGNATURE_CHECK} )
         list( APPEND avrdude_common_arguments "-F" )
