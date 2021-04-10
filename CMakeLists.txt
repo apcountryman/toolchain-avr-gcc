@@ -55,6 +55,13 @@ set( AVRDUDE_PORT                ""        CACHE STRING "avrdude: port"         
 set( AVRDUDE_PROGRAMMER          ""        CACHE STRING "avrdude: programmer"          )
 set( AVRDUDE_VERBOSITY           "VERBOSE" CACHE STRING "avrdude: verbosity"           )
 
+set( AVRDUDE_MEMORY_OPERATIONS_POST_FLASH_PROGRAM "" CACHE STRING "avrdude: post Flash programming memory operations" )
+set( AVRDUDE_MEMORY_OPERATIONS_PRE_FLASH_PROGRAM  "" CACHE STRING "avrdude: pre Flash programming memory operations" )
+mark_as_advanced(
+    AVRDUDE_MEMORY_OPERATIONS_POST_FLASH_PROGRAM
+    AVRDUDE_MEMORY_OPERATIONS_PRE_FLASH_PROGRAM
+)
+
 if( AVRDUDE_ALWAYS_RECOVER_FUSES_ENABLED )
     set( AVRDUDE_ALWAYS_RECOVER_FUSES "ALWAYS_RECOVER_FUSES" )
 endif( AVRDUDE_ALWAYS_RECOVER_FUSES_ENABLED )

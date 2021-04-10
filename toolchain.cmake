@@ -119,6 +119,8 @@ mark_as_advanced( CMAKE_AVRDUDE )
 #         [EXTENDED_PARAMETERS <extended_parameters>]
 #         [PORT <port>]
 #         [VERBOSITY VERY_QUIET|QUIET|VERBOSE|VERY_VERBOSE]
+#         [MEMORY_OPERATIONS_POST_FLASH_PROGRAM <memory_operation>...]
+#         [MEMORY_OPERATIONS_PRE_FLASH_PROGRAM <memory_operation>...]
 #     )
 # OPTIONS
 #     <executable>
@@ -147,6 +149,14 @@ mark_as_advanced( CMAKE_AVRDUDE )
 #         Equivalent to avrdude's "-E <exit_specification>" option.
 #     EXTENDED_PARAMETERS <extended_parameters>
 #         Equivalent to avrdude's "-x <extended_parameters>" option.
+#     MEMORY_OPERATIONS_POST_FLASH_PROGRAM <memory_operation>...
+#         Equivalent to avrdude's "-U <memtype>:r|w|v:<filename>[:format]" option. Only
+#         affects the "-program-flash" target. Memory operations will be performed after
+#         the memory operation that programs the Flash.
+#     MEMORY_OPERATIONS_PRE_FLASH_PROGRAM <memory_operation>...
+#         Equivalent to avrdude's "-U <memtype>:r|w|v:<filename>[:format]" option. Only
+#         affects the "-program-flash" target. Memory operations will be performed before
+#         the memory operation that programs the Flash.
 #     OVERRIDE_SIGNATURE_CHECK
 #         Equivalent to avrdude's "-F" option.
 #     PART <part>
@@ -187,7 +197,7 @@ function( add_avrdude_programming_targets executable )
         add_avrdude_programming_targets
         "ALWAYS_RECOVER_FUSES;DISABLE_AUTOMATIC_FLASH_ERASE;DISABLE_AUTOMATIC_VERIFY;DISABLE_FUSE_CHECKS;DISABLE_WRITES;ERASE_CHIP;OVERRIDE_SIGNATURE_CHECK"
         "BAUD_RATE;BIT_CLOCK;CONFIGURATION_FILE;DELAY;EXIT_SPECIFICATION;EXTENDED_PARAMETERS;PART;PORT;PROGRAMMER;VERBOSITY"
-        ""
+        "MEMORY_OPERATIONS_PRE_FLASH_PROGRAM;MEMORY_OPERATIONS_POST_FLASH_PROGRAM"
         ${ARGN}
     )
 
@@ -313,25 +323,42 @@ function( add_avrdude_programming_targets executable )
     list( APPEND avrdude_verify_flash_arguments   ${avrdude_common_arguments} ${avrdude_verify_arguments}  )
     list( APPEND avrdude_verify_eeprom_arguments  ${avrdude_common_arguments} ${avrdude_verify_arguments}  )
 
+    if ( add_avrdude_programming_targets_MEMORY_OPERATIONS_PRE_FLASH_PROGRAM )
+        foreach( memory_operation IN LISTS add_avrdude_programming_targets_MEMORY_OPERATIONS_PRE_FLASH_PROGRAM )
+            list( APPEND avrdude_program_flash_arguments "-U" "${memory_operation}" )
+        endforeach()
+    endif ( add_avrdude_programming_targets_MEMORY_OPERATIONS_PRE_FLASH_PROGRAM )
+
+    list( APPEND avrdude_program_flash_arguments  "-U" "flash:w:${executable}.flash.hex:i"   )
+    list( APPEND avrdude_program_eeprom_arguments "-U" "flash:v:${executable}.flash.hex:i"   )
+    list( APPEND avrdude_verify_flash_arguments   "-U" "eeprom:w:${executable}.eeprom.hex:i" )
+    list( APPEND avrdude_verify_eeprom_arguments  "-U" "eeprom:v:${executable}.eeprom.hex:i" )
+
+    if ( add_avrdude_programming_targets_MEMORY_OPERATIONS_POST_FLASH_PROGRAM )
+        foreach( memory_operation IN LISTS add_avrdude_programming_targets_MEMORY_OPERATIONS_POST_FLASH_PROGRAM )
+            list( APPEND avrdude_program_flash_arguments "-U" "${memory_operation}" )
+        endforeach()
+    endif ( add_avrdude_programming_targets_MEMORY_OPERATIONS_POST_FLASH_PROGRAM )
+
     add_custom_target(
         "${executable}-program-flash"
-        COMMAND "${CMAKE_AVRDUDE}" ${avrdude_program_flash_arguments} -U "flash:w:${executable}.flash.hex:i"
+        COMMAND "${CMAKE_AVRDUDE}" ${avrdude_program_flash_arguments}
         DEPENDS "${executable}.flash.hex"
     )
     add_custom_target(
         "${executable}-verify-flash"
-        COMMAND "${CMAKE_AVRDUDE}" ${avrdude_verify_flash_arguments} -U "flash:v:${executable}.flash.hex:i"
+        COMMAND "${CMAKE_AVRDUDE}" ${avrdude_verify_flash_arguments}
         DEPENDS "${executable}.flash.hex"
     )
 
     add_custom_target(
         "${executable}-program-eeprom"
-        COMMAND "${CMAKE_AVRDUDE}" ${avrdude_program_eeprom_arguments} -U "eeprom:w:${executable}.eeprom.hex:i"
+        COMMAND "${CMAKE_AVRDUDE}" ${avrdude_program_eeprom_arguments}
         DEPENDS "${executable}.eeprom.hex"
     )
     add_custom_target(
         "${executable}-verify-eeprom"
-        COMMAND "${CMAKE_AVRDUDE}" ${avrdude_verify_eeprom_arguments} -U "eeprom:v:${executable}.eeprom.hex:i"
+        COMMAND "${CMAKE_AVRDUDE}" ${avrdude_verify_eeprom_arguments}
         DEPENDS "${executable}.eeprom.hex"
     )
 endfunction( add_avrdude_programming_targets )
