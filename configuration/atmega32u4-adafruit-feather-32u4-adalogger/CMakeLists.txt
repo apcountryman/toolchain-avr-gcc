@@ -29,23 +29,11 @@ mark_as_advanced(
 )
 
 # avrdude configuration
-set( AVRDUDE_BAUD_RATE                             "57600"      CACHE STRING "" FORCE )
-set( AVRDUDE_BIT_CLOCK                             ""           CACHE STRING "" FORCE )
-set( AVRDUDE_DELAY                                 ""           CACHE STRING "" FORCE )
-set( AVRDUDE_DISABLE_AUTOMATIC_FLASH_ERASE_ENABLED ON           CACHE BOOL   "" FORCE )
-set( AVRDUDE_EXIT_SPECIFICATION                    ""           CACHE STRING "" FORCE )
-set( AVRDUDE_EXTENDED_PARAMETERS                   ""           CACHE STRING "" FORCE )
-set( AVRDUDE_PART                                  "atmega32u4" CACHE STRING "" FORCE )
-set( AVRDUDE_PROGRAMMER                            "avr109"     CACHE STRING "" FORCE )
+set( AVRDUDE_PROGRAM_FLASH "-p" "atmega32u4" "-c" "avr109" "-b" "57600" "-D" CACHE STRING "" FORCE )
+set( AVRDUDE_VERIFY_FLASH  "-p" "atmega32u4" "-c" "avr109" "-b" "57600"      CACHE STRING "" FORCE )
 mark_as_advanced(
-    AVRDUDE_BAUD_RATE
-    AVRDUDE_BIT_CLOCK
-    AVRDUDE_DELAY
-    AVRDUDE_DISABLE_AUTOMATIC_FLASH_ERASE_ENABLED
-    AVRDUDE_EXIT_SPECIFICATION
-    AVRDUDE_EXTENDED_PARAMETERS
-    AVRDUDE_PART
-    AVRDUDE_PROGRAMMER
+    AVRDUDE_PROGRAM_FLASH
+    AVRDUDE_VERIFY_FLASH
 )
 
 include( "${CMAKE_CURRENT_LIST_DIR}/examples/blink/CMakeLists.txt" )
