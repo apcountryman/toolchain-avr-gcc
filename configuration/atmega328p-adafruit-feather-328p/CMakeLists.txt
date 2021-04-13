@@ -30,9 +30,11 @@ mark_as_advanced(
 
 # avrdude configuration
 set( AVRDUDE_PROGRAM_FLASH "-p" "atmega328p" "-c" "arduino" "-b" "57600" "-D" CACHE STRING "" FORCE )
+set( AVRDUDE_RESET_ENABLED OFF                                                CACHE BOOL   "" FORCE )
 set( AVRDUDE_VERIFY_FLASH  "-p" "atmega328p" "-c" "arduino" "-b" "57600"      CACHE STRING "" FORCE )
 mark_as_advanced(
     AVRDUDE_PROGRAM_FLASH
+    AVRDUDE_RESET_ENABLED
     AVRDUDE_VERIFY_FLASH
 )
 
