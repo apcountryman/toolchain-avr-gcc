@@ -18,6 +18,8 @@
 
 cmake_minimum_required( VERSION 3.13.4 )
 
+set( TOOLCHAIN_AVR_GCC_DIR "${CMAKE_CURRENT_LIST_DIR}" )
+
 mark_as_advanced(
     CMAKE_TOOLCHAIN_FILE
     CMAKE_INSTALL_PREFIX
@@ -88,6 +90,7 @@ mark_as_advanced( CMAKE_AVRDUDE )
 # SYNOPSIS
 #     add_avrdude_programming_targets(
 #         <executable>
+#         [RESET]
 #         [CONFIGURATION_FILE <configuration_file>]
 #         [PORT <port>]
 #         [VERBOSITY VERY_QUIET|QUIET|VERBOSE|VERY_VERBOSE]
@@ -117,6 +120,9 @@ mark_as_advanced( CMAKE_AVRDUDE )
 #         ("<executable>.flash.hex") creation target ("<executable>-hex-flash") will be
 #         created as well. The Flash programming/verification hex file creation target
 #         will be added to ALL.
+#     RESET
+#         Reset the AVR before executing avrdude by opening the port the AVR is connected
+#         to at 1200 bits/second, and then closing the port.
 #     VERBOSITY VERY_QUIET|QUIET|VERBOSE|VERY_VERBOSE
 #         Specify avrdude's output verbosity. "VERY_QUIET" is equivalent to avrdude's "-q
 #         -q" option. "QUIET" is equivalent to avrdude's "-q" option. "VERBOSE" is
@@ -149,6 +155,14 @@ mark_as_advanced( CMAKE_AVRDUDE )
 #         PROGRAM_FLASH -p atmega328p -c arduino -b 115200 -D
 #         VERIFY_FLASH  -p atmega328p -c arduino -b 115200
 #     )
+#     add_avrdude_programming_targets(
+#         example
+#         RESET
+#         PORT          /dev/ttyACM0
+#         VERBOSITY     VERY_VERBOSE
+#         PROGRAM_FLASH -p atmega4809 -c jtag2updi -b 115200 -e -D
+#         VERIFY_FLASH  -p atmega4809 -c jtag2updi -b 115200
+#     )
 function( add_avrdude_programming_targets executable )
     if( "${CMAKE_AVRDUDE}" STREQUAL "CMAKE_AVRDUDE-NOTFOUND" )
         message( FATAL_ERROR "avrdude not found" )
@@ -156,7 +170,7 @@ function( add_avrdude_programming_targets executable )
 
     cmake_parse_arguments(
         add_avrdude_programming_targets
-        ""
+        "RESET"
         "CONFIGURATION_FILE;PORT;VERBOSITY"
         "PROGRAM_EEPROM;PROGRAM_FLASH;VERIFY_EEPROM;VERIFY_FLASH"
         ${ARGN}
@@ -193,6 +207,7 @@ function( add_avrdude_programming_targets executable )
         )
     endif( DEFINED add_avrdude_programming_targets_PROGRAM_EEPROM OR DEFINED add_avrdude_programming_targets_VERIFY_EEPROM )
 
+    set( reset_arguments          "" )
     set( avrdude_common_arguments "" )
 
     if( DEFINED add_avrdude_programming_targets_CONFIGURATION_FILE )
@@ -200,6 +215,7 @@ function( add_avrdude_programming_targets executable )
     endif( DEFINED add_avrdude_programming_targets_CONFIGURATION_FILE )
 
     if( DEFINED add_avrdude_programming_targets_PORT )
+        list( APPEND reset_arguments               "${add_avrdude_programming_targets_PORT}" )
         list( APPEND avrdude_common_arguments "-P" "${add_avrdude_programming_targets_PORT}" )
     endif( DEFINED add_avrdude_programming_targets_PORT )
 
@@ -218,34 +234,78 @@ function( add_avrdude_programming_targets executable )
     endif( DEFINED add_avrdude_programming_targets_VERBOSITY )
 
     if( DEFINED add_avrdude_programming_targets_PROGRAM_FLASH )
-        add_custom_target(
-            "${executable}-program-flash"
-            COMMAND "${CMAKE_AVRDUDE}" ${avrdude_common_arguments} "-U" "flash:w:${executable}.flash.hex:i" ${add_avrdude_programming_targets_PROGRAM_FLASH}
-            DEPENDS "${executable}.flash.hex"
-        )
+        set( avrdude_program_flash_arguments ${avrdude_common_arguments} "-U" "flash:w:${executable}.flash.hex:i" ${add_avrdude_programming_targets_PROGRAM_FLASH} )
+
+        if( ${add_avrdude_programming_targets_RESET} )
+            add_custom_target(
+                "${executable}-program-flash"
+                COMMAND "${TOOLCHAIN_AVR_GCC_DIR}/utility/reset.py" ${reset_arguments}
+                COMMAND "${CMAKE_AVRDUDE}" ${avrdude_program_flash_arguments}
+                DEPENDS "${executable}.flash.hex"
+            )
+        else( ${add_avrdude_programming_targets_RESET} )
+            add_custom_target(
+                "${executable}-program-flash"
+                COMMAND "${CMAKE_AVRDUDE}" ${avrdude_program_flash_arguments}
+                DEPENDS "${executable}.flash.hex"
+            )
+        endif( ${add_avrdude_programming_targets_RESET} )
     endif( DEFINED add_avrdude_programming_targets_PROGRAM_FLASH )
 
     if( DEFINED add_avrdude_programming_targets_VERIFY_FLASH )
-        add_custom_target(
-            "${executable}-verify-flash"
-            COMMAND "${CMAKE_AVRDUDE}" ${avrdude_common_arguments} "-U" "flash:v:${executable}.flash.hex:i" ${add_avrdude_programming_targets_VERIFY_FLASH}
-            DEPENDS "${executable}.flash.hex"
-        )
+        set( avrdude_verify_flash_arguments ${avrdude_common_arguments} "-U" "flash:v:${executable}.flash.hex:i" ${add_avrdude_programming_targets_VERIFY_FLASH} )
+
+        if( ${add_avrdude_programming_targets_RESET} )
+            add_custom_target(
+                "${executable}-verify-flash"
+                COMMAND "${TOOLCHAIN_AVR_GCC_DIR}/utility/reset.py" ${reset_arguments}
+                COMMAND "${CMAKE_AVRDUDE}" ${avrdude_verify_flash_arguments}
+                DEPENDS "${executable}.flash.hex"
+            )
+        else( ${add_avrdude_programming_targets_RESET} )
+            add_custom_target(
+                "${executable}-verify-flash"
+                COMMAND "${CMAKE_AVRDUDE}" ${avrdude_verify_flash_arguments}
+                DEPENDS "${executable}.flash.hex"
+            )
+        endif( ${add_avrdude_programming_targets_RESET} )
     endif( DEFINED add_avrdude_programming_targets_VERIFY_FLASH )
 
     if( DEFINED add_avrdude_programming_targets_PROGRAM_EEPROM )
-        add_custom_target(
-            "${executable}-program-eeprom"
-            COMMAND "${CMAKE_AVRDUDE}" ${avrdude_common_arguments} "-U" "eeprom:w:${executable}.eeprom.hex:i" ${add_avrdude_programming_targets_PROGRAM_EEPROM}
-            DEPENDS "${executable}.eeprom.hex"
-        )
+        set( avrdude_program_eeprom_arguments ${avrdude_common_arguments} "-U" "eeprom:w:${executable}.eeprom.hex:i" ${add_avrdude_programming_targets_PROGRAM_EEPROM} )
+
+        if( ${add_avrdude_programming_targets_RESET} )
+            add_custom_target(
+                "${executable}-program-eeprom"
+                COMMAND "${TOOLCHAIN_AVR_GCC_DIR}/utility/reset.py" ${reset_arguments}
+                COMMAND "${CMAKE_AVRDUDE}" ${avrdude_program_eeprom_arguments}
+                DEPENDS "${executable}.eeprom.hex"
+            )
+        else( ${add_avrdude_programming_targets_RESET} )
+            add_custom_target(
+                "${executable}-program-eeprom"
+                COMMAND "${CMAKE_AVRDUDE}" ${avrdude_program_eeprom_arguments}
+                DEPENDS "${executable}.eeprom.hex"
+            )
+        endif( ${add_avrdude_programming_targets_RESET} )
     endif( DEFINED add_avrdude_programming_targets_PROGRAM_EEPROM )
 
     if( DEFINED add_avrdude_programming_targets_VERIFY_EEPROM )
-        add_custom_target(
-            "${executable}-verify-eeprom"
-            COMMAND "${CMAKE_AVRDUDE}" ${avrdude_common_arguments} "-U" "eeprom:v:${executable}.eeprom.hex:i" ${add_avrdude_programming_targets_VERIFY_EEPROM}
-            DEPENDS "${executable}.eeprom.hex"
-        )
+        set( avrdude_verify_eeprom_arguments ${avrdude_common_arguments} "-U" "eeprom:v:${executable}.eeprom.hex:i" ${add_avrdude_programming_targets_VERIFY_EEPROM} )
+
+        if( ${add_avrdude_programming_targets_RESET} )
+            add_custom_target(
+                "${executable}-verify-eeprom"
+                COMMAND "${TOOLCHAIN_AVR_GCC_DIR}/utility/reset.py" ${reset_arguments}
+                COMMAND "${CMAKE_AVRDUDE}" ${avrdude_verify_eeprom_arguments}
+                DEPENDS "${executable}.eeprom.hex"
+            )
+        else( ${add_avrdude_programming_targets_RESET} )
+            add_custom_target(
+                "${executable}-verify-eeprom"
+                COMMAND "${CMAKE_AVRDUDE}" ${avrdude_verify_eeprom_arguments}
+                DEPENDS "${executable}.eeprom.hex"
+            )
+        endif( ${add_avrdude_programming_targets_RESET} )
     endif( DEFINED add_avrdude_programming_targets_VERIFY_EEPROM )
 endfunction( add_avrdude_programming_targets )

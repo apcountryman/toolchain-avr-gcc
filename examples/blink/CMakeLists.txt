@@ -53,6 +53,7 @@ if( ${EXAMPLES_BLINK_ENABLED} )
     )
     add_avrdude_programming_targets(
         blink-c
+        ${AVRDUDE_RESET}
         CONFIGURATION_FILE  ${AVRDUDE_CONFIGURATION_FILE}
         PORT                ${AVRDUDE_PORT}
         PROGRAM_FLASH       ${AVRDUDE_PROGRAM_FLASH}
@@ -72,6 +73,7 @@ if( ${EXAMPLES_BLINK_ENABLED} )
     )
     add_avrdude_programming_targets(
         blink-c++
+        ${AVRDUDE_RESET}
         CONFIGURATION_FILE  ${AVRDUDE_CONFIGURATION_FILE}
         PORT                ${AVRDUDE_PORT}
         PROGRAM_FLASH       ${AVRDUDE_PROGRAM_FLASH}
