@@ -27,68 +27,11 @@ set( MICROCHIP_AVR_MCU   "" CACHE STRING "Microchip AVR: MCU"                  )
 set( MICROCHIP_AVR_F_CPU "" CACHE STRING "Microchip AVR: MCU frequency, in Hz" )
 
 # avrdude configuration
-option( AVRDUDE_ALWAYS_RECOVER_FUSES_ENABLED          "avrdude: always recover fuses"          OFF )
-option( AVRDUDE_DISABLE_AUTOMATIC_FLASH_ERASE_ENABLED "avrdude: disable automatic Flash erase" OFF )
-option( AVRDUDE_DISABLE_AUTOMATIC_VERIFY_ENABLED      "avrdude: disable automatic verify"      OFF )
-option( AVRDUDE_DISABLE_FUSE_CHECKS_ENABLED           "avrdude: disable fuse checks"           OFF )
-option( AVRDUDE_DISABLE_WRITES_ENABLED                "avrdude: disable writes"                OFF )
-option( AVRDUDE_ERASE_CHIP_ENABLED                    "avrdude: erase chip"                    OFF )
-option( AVRDUDE_OVERRIDE_SIGNATURE_CHECK_ENABLED      "avrdude: override signature check"      OFF )
-mark_as_advanced(
-    AVRDUDE_ALWAYS_RECOVER_FUSES_ENABLED
-    AVRDUDE_DISABLE_AUTOMATIC_FLASH_ERASE_ENABLED
-    AVRDUDE_DISABLE_AUTOMATIC_VERIFY_ENABLED
-    AVRDUDE_DISABLE_FUSE_CHECKS_ENABLED
-    AVRDUDE_DISABLE_WRITES_ENABLED
-    AVRDUDE_ERASE_CHIP_ENABLED
-    AVRDUDE_OVERRIDE_SIGNATURE_CHECK_ENABLED
-)
-
-set( AVRDUDE_BAUD_RATE           ""        CACHE STRING "avrdude: baud rate"           )
-set( AVRDUDE_BIT_CLOCK           ""        CACHE STRING "avrdude: bit clock"           )
-set( AVRDUDE_CONFIGURATION_FILE  ""        CACHE STRING "avrdude: configuration file"  )
-set( AVRDUDE_DELAY               ""        CACHE STRING "avrdude: delay"               )
-set( AVRDUDE_EXIT_SPECIFICATION  ""        CACHE STRING "avrdude: exit specification"  )
-set( AVRDUDE_EXTENDED_PARAMETERS ""        CACHE STRING "avrdude: extended parameters" )
-set( AVRDUDE_PART                ""        CACHE STRING "avrdude: part"                )
-set( AVRDUDE_PORT                ""        CACHE STRING "avrdude: port"                )
-set( AVRDUDE_PROGRAMMER          ""        CACHE STRING "avrdude: programmer"          )
-set( AVRDUDE_VERBOSITY           "VERBOSE" CACHE STRING "avrdude: verbosity"           )
-
-set( AVRDUDE_MEMORY_OPERATIONS_POST_FLASH_PROGRAM "" CACHE STRING "avrdude: post Flash programming memory operations" )
-set( AVRDUDE_MEMORY_OPERATIONS_PRE_FLASH_PROGRAM  "" CACHE STRING "avrdude: pre Flash programming memory operations" )
-mark_as_advanced(
-    AVRDUDE_MEMORY_OPERATIONS_POST_FLASH_PROGRAM
-    AVRDUDE_MEMORY_OPERATIONS_PRE_FLASH_PROGRAM
-)
-
-if( AVRDUDE_ALWAYS_RECOVER_FUSES_ENABLED )
-    set( AVRDUDE_ALWAYS_RECOVER_FUSES "ALWAYS_RECOVER_FUSES" )
-endif( AVRDUDE_ALWAYS_RECOVER_FUSES_ENABLED )
-
-if( AVRDUDE_DISABLE_AUTOMATIC_FLASH_ERASE_ENABLED )
-    set( AVRDUDE_DISABLE_AUTOMATIC_FLASH_ERASE "DISABLE_AUTOMATIC_FLASH_ERASE" )
-endif( AVRDUDE_DISABLE_AUTOMATIC_FLASH_ERASE_ENABLED )
-
-if( AVRDUDE_DISABLE_AUTOMATIC_VERIFY_ENABLED )
-    set( AVRDUDE_DISABLE_AUTOMATIC_VERIFY "DISABLE_AUTOMATIC_VERIFY" )
-endif( AVRDUDE_DISABLE_AUTOMATIC_VERIFY_ENABLED )
-
-if( AVRDUDE_DISABLE_FUSE_CHECKS_ENABLED )
-    set( AVRDUDE_DISABLE_FUSE_CHECKS "DISABLE_FUSE_CHECKS" )
-endif( AVRDUDE_DISABLE_FUSE_CHECKS_ENABLED )
-
-if( AVRDUDE_DISABLE_WRITES_ENABLED )
-    set( AVRDUDE_DISABLE_WRITES "DISABLE_WRITES" )
-endif( AVRDUDE_DISABLE_WRITES_ENABLED )
-
-if( AVRDUDE_ERASE_CHIP_ENABLED )
-    set( AVRDUDE_ERASE_CHIP "ERASE_CHIP" )
-endif( AVRDUDE_ERASE_CHIP_ENABLED )
-
-if( AVRDUDE_OVERRIDE_SIGNATURE_CHECK_ENABLED )
-    set( AVRDUDE_OVERRIDE_SIGNATURE_CHECK "OVERRIDE_SIGNATURE_CHECK" )
-endif( AVRDUDE_OVERRIDE_SIGNATURE_CHECK_ENABLED )
+set( AVRDUDE_CONFIGURATION_FILE  ""        CACHE STRING "avrdude: configuration file"                   )
+set( AVRDUDE_PORT                ""        CACHE STRING "avrdude: port"                                 )
+set( AVRDUDE_PROGRAM_FLASH       ""        CACHE STRING "avrdude: flash programming avrdude arguments"  )
+set( AVRDUDE_VERBOSITY           "VERBOSE" CACHE STRING "avrdude: verbosity"                            )
+set( AVRDUDE_VERIFY_FLASH        ""        CACHE STRING "avrdude: flash verification avrdude arguments" )
 
 # configure compilation and linking
 set(
