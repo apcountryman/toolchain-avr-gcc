@@ -124,7 +124,7 @@ mark_as_advanced( CMAKE_AVRDUDE )
 #        RESET
 #        PORT      /dev/ttyACM0
 #        VERBOSITY VERY_VERBOSE
-#        ARGUMENTS -p atmega4809 -c jtag2updi -b 115200 -D -U fuse2:w:0x01:m -U
+#        ARGUMENTS -p atmega4809 -c jtag2updi -b 115200 -U fuse2:w:0x01:m -U
 #            fuse5:w:0xC9:m -U fuse8:w:0x00:m
 #    )
 function( add_avrdude_target target )
