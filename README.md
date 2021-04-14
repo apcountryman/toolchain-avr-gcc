@@ -22,6 +22,9 @@ git clone git@github.com:apcountryman/toolchain-avr-gcc.git
 To use this toolchain, simply set `CMAKE_TOOLCHAIN_FILE` to the path to this repository's
 `toolchain.cmake` file when initializing CMake.
 
+Documentation for the usage of `add_avrdude_target()` [can be found in the
+`toolchain.cmake` file in this repository](toolchain.cmake).
+
 Documentation for the usage of `add_avrdude_programming_targets()` and the targets it
 creates [can be found in the `toolchain.cmake` file in this repository](toolchain.cmake).
 Usage examples [can be found in the `examples` directory in this repository](examples).
