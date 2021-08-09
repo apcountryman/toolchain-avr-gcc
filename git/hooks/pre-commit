@@ -233,10 +233,6 @@ function main()
                 display_help_text
                 exit
                 ;;
-            --version)
-                display_version
-                exit
-                ;;
             --jobs)
                 if [[ -n "$build_jobs" ]]; then
                     abort "build job count already specified"
@@ -247,6 +243,10 @@ function main()
                 fi
 
                 local -r build_jobs="$1"; shift
+                ;;
+            --version)
+                display_version
+                exit
                 ;;
             --*)
                 ;&
