@@ -89,14 +89,6 @@ function main()
         local argument="$1"; shift
 
         case "$argument" in
-            --help)
-                display_help_text
-                exit
-                ;;
-            --version)
-                display_version
-                exit
-                ;;
             --analyzer)
                 if [[ -n "$analyzer" ]]; then
                     abort "analyzer already specified"
@@ -111,6 +103,14 @@ function main()
                 if [[ "$analyzer" != "shellcheck" ]]; then
                     abort "'$analyzer' is not a supported analyzer"
                 fi
+                ;;
+            --help)
+                display_help_text
+                exit
+                ;;
+            --version)
+                display_version
+                exit
                 ;;
             --*)
                 ;&
