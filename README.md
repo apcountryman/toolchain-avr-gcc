@@ -22,17 +22,21 @@ git clone git@github.com:apcountryman/toolchain-avr-gcc.git
 To use this toolchain, simply set `CMAKE_TOOLCHAIN_FILE` to the path to this repository's
 `toolchain.cmake` file when initializing CMake.
 
+To use the avrdude utilities, add the path to this repository to the project's
+`CMAKE_MODULE_PATH`, and include `avrdude-utilities.cmake`.
+
 Documentation for the usage of `add_avrdude_target()` [can be found in the
-`toolchain.cmake` file in this repository](toolchain.cmake).
+`avrdude-utilities.cmake` file in this repository](avrdude-utilities.cmake).
 
 Documentation for the usage of `add_avrdude_programming_targets()` and the targets it
-creates [can be found in the `toolchain.cmake` file in this repository](toolchain.cmake).
+creates [can be found in the `avrdude-utilities.cmake` file in this
+repository](avrdude-utilities.cmake).
 Usage examples [can be found in the `examples` directory in this repository](examples).
 
 ### Finding Tools
 This toolchain expects to find `avr-gcc`, `avr-g++`, associated binary utilities, and
 `avrdude` in the path(s) searched by CMake's `find_program()` command.
-`avrdude` is only required if `add_avrdude_programming_targets()` is used.
+`avrdude` is only required if `avrdude-utilities.cmake` is included.
 If the toolchain fails to locate tools, consult the documentation for CMake's
 `find_program()` command.
 

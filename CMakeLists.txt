@@ -22,6 +22,8 @@ project(
     LANGUAGES C CXX
 )
 
+include( avrdude-utilities.cmake )
+
 # Microchip AVR configuration
 set( MICROCHIP_AVR_MCU   "" CACHE STRING "Microchip AVR: MCU"                  )
 set( MICROCHIP_AVR_F_CPU "" CACHE STRING "Microchip AVR: MCU frequency, in Hz" )
