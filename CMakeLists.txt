@@ -44,7 +44,7 @@ endif( ${AVRDUDE_RESET_ENABLED} )
 # configure compilation and linking
 set( CMAKE_CXX_STANDARD 17 )
 add_compile_options(
-    $&lt;$&lt;COMPILE_LANGUAGE:C>:-std=gnu17>
+    $<$<COMPILE_LANGUAGE:C>:-std=gnu17>
     -mmcu=${MICROCHIP_AVR_MCU}
     -Werror -Wall -Wextra
     -Wcast-align=strict
