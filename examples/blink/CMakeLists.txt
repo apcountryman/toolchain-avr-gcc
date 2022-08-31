@@ -21,23 +21,17 @@ option( EXAMPLES_BLINK_ENABLED "examples: build the blink example program" OFF )
 if( ${EXAMPLES_BLINK_ENABLED} )
     set(
         EXAMPLES_BLINK_INDICATOR_PORT_LETTER
-        ""
-        CACHE
-        STRING
+        "" CACHE STRING
         "examples: blink example program indicator port letter"
     )
     set(
         EXAMPLES_BLINK_INDICATOR_PIN_NUMBER
-        ""
-        CACHE
-        STRING
+        "" CACHE STRING
         "examples: blink example program indicator pin number"
     )
     set(
         EXAMPLES_BLINK_INDICATOR_BLINK_FREQUENCY_HZ
-        "1"
-        CACHE
-        STRING
+        "1" CACHE STRING
         "examples: blink example program indicator blink frequency, in Hz"
     )
 

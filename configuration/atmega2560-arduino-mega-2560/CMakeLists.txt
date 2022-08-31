@@ -17,25 +17,15 @@
 # Description: ATmega2560 Arduino Mega 2560 toolchain-avr-gcc configuration.
 
 # CMake build type configuration
-set( CMAKE_BUILD_TYPE "MinSizeRel" CACHE STRING "" FORCE )
-mark_as_advanced( CMAKE_BUILD_TYPE )
+set( CMAKE_BUILD_TYPE "MinSizeRel" CACHE INTERNAL "" )
 
 # Microchip AVR configuration
-set( MICROCHIP_AVR_MCU   "atmega2560" CACHE STRING "" FORCE )
-set( MICROCHIP_AVR_F_CPU "16000000"   CACHE STRING "" FORCE )
-mark_as_advanced(
-    MICROCHIP_AVR_MCU
-    MICROCHIP_AVR_F_CPU
-)
+set( MICROCHIP_AVR_MCU   "atmega2560" CACHE INTERNAL "" )
+set( MICROCHIP_AVR_F_CPU "16000000"   CACHE INTERNAL "" )
 
 # avrdude configuration
-set( AVRDUDE_PROGRAM_FLASH "-p" "atmega2560" "-c" "wiring" "-b" "115200" "-D" CACHE STRING "" FORCE )
-set( AVRDUDE_RESET_ENABLED OFF                                                CACHE BOOL   "" FORCE )
-set( AVRDUDE_VERIFY_FLASH  "-p" "atmega2560" "-c" "wiring" "-b" "115200"      CACHE STRING "" FORCE )
-mark_as_advanced(
-    AVRDUDE_PROGRAM_FLASH
-    AVRDUDE_RESET_ENABLED
-    AVRDUDE_VERIFY_FLASH
-)
+set( AVRDUDE_PROGRAM_FLASH "-p" "atmega2560" "-c" "wiring" "-b" "115200" "-D" CACHE INTERNAL "" )
+set( AVRDUDE_RESET_ENABLED OFF                                                CACHE INTERNAL "" )
+set( AVRDUDE_VERIFY_FLASH  "-p" "atmega2560" "-c" "wiring" "-b" "115200"      CACHE INTERNAL "" )
 
 include( "${CMAKE_CURRENT_LIST_DIR}/examples/blink/CMakeLists.txt" )
