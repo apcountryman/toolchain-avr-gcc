@@ -42,49 +42,32 @@ if( ${AVRDUDE_RESET_ENABLED} )
 endif( ${AVRDUDE_RESET_ENABLED} )
 
 # configure compilation and linking
-set(
-    CMAKE_C_FLAGS
-    "${CMAKE_C_FLAGS} \
-    -std=c17 \
-    -Werror -Wall -Wextra \
-    -Wcast-align=strict \
-    -Wcast-qual \
-    -Wduplicated-cond \
-    -Wfloat-equal \
-    -Wimplicit-fallthrough=5 \
-    -Wlogical-op \
-    -Wmissing-field-initializers \
-    -Wmissing-include-dirs \
-    -Wpointer-arith \
-    -Wshadow \
-    -Wstrict-prototypes \
-    -Wunsafe-loop-optimizations \
-    -mmcu=${MICROCHIP_AVR_MCU} \
-    -DF_CPU=${MICROCHIP_AVR_F_CPU}UL \
-    "
-)
 set( CMAKE_CXX_STANDARD 17 )
-set(
-    CMAKE_CXX_FLAGS
-    "${CMAKE_CXX_FLAGS} \
-    -Werror -Wall -Wextra \
-    -Wcast-align=strict \
-    -Wcast-qual \
-    -Wduplicated-cond \
-    -Wextra-semi \
-    -Wfloat-equal \
-    -Wimplicit-fallthrough=5 \
-    -Wlogical-op \
-    -Wmissing-field-initializers \
-    -Wmissing-include-dirs \
-    -Wold-style-cast \
-    -Wplacement-new=2 \
-    -Wpointer-arith \
-    -Wshadow \
-    -Wunsafe-loop-optimizations \
-    -mmcu=${MICROCHIP_AVR_MCU} \
-    -DF_CPU=${MICROCHIP_AVR_F_CPU} \
-    "
+add_compile_options(
+    $<$<COMPILE_LANGUAGE:C>:-std=gnu17>
+    -mmcu=${MICROCHIP_AVR_MCU}
+    -Werror -Wall -Wextra
+    -Wcast-align=strict
+    -Wcast-qual
+    -Wduplicated-cond
+    -Wfloat-equal
+    -Wimplicit-fallthrough=5
+    -Wlogical-op
+    -Wmissing-field-initializers
+    -Wmissing-include-dirs
+    -Wpointer-arith
+    -Wshadow
+    -Wunsafe-loop-optimizations
+    $<$<COMPILE_LANGUAGE:C>:-Wstrict-prototypes>
+    $<$<COMPILE_LANGUAGE:CXX>:-Wextra-semi>
+    $<$<COMPILE_LANGUAGE:CXX>:-Wold-style-cast>
+    $<$<COMPILE_LANGUAGE:CXX>:-Wplacement-new=2>
+)
+add_compile_definitions(
+    F_CPU=${MICROCHIP_AVR_F_CPU}UL
+)
+add_link_options(
+    -mmcu=${MICROCHIP_AVR_MCU}
 )
 
 # build the toolchain's examples
