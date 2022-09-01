@@ -17,7 +17,11 @@
 # Description: toolchain-avr-gcc blink examples CMake rules.
 
 # build the blink examples
-option( EXAMPLES_BLINK_ENABLED "examples: build the blink example program" OFF )
+option(
+    EXAMPLES_BLINK_ENABLED
+    "examples: build the blink example program"
+    OFF
+)
 if( ${EXAMPLES_BLINK_ENABLED} )
     set(
         EXAMPLES_BLINK_INDICATOR_PORT_LETTER

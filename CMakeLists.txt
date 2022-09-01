@@ -25,17 +25,49 @@ project(
 include( avrdude-utilities.cmake )
 
 # Microchip AVR configuration
-set( MICROCHIP_AVR_MCU   "" CACHE STRING "Microchip AVR: MCU"                  )
-set( MICROCHIP_AVR_F_CPU "" CACHE STRING "Microchip AVR: MCU frequency, in Hz" )
+set(
+    MICROCHIP_AVR_MCU
+    "" CACHE STRING
+    "Microchip AVR: MCU"
+)
+set(
+    MICROCHIP_AVR_F_CPU
+    "" CACHE STRING
+    "Microchip AVR: MCU frequency, in Hz"
+)
 
 # avrdude configuration
-option( AVRDUDE_RESET_ENABLED "avrdude: reset AVR before executing avrdude" OFF )
+option(
+    AVRDUDE_RESET_ENABLED
+    "avrdude: reset AVR before executing avrdude"
+    OFF
+)
 
-set( AVRDUDE_CONFIGURATION_FILE  ""        CACHE STRING "avrdude: configuration file"                   )
-set( AVRDUDE_PORT                ""        CACHE STRING "avrdude: port"                                 )
-set( AVRDUDE_PROGRAM_FLASH       ""        CACHE STRING "avrdude: flash programming avrdude arguments"  )
-set( AVRDUDE_VERBOSITY           "VERBOSE" CACHE STRING "avrdude: verbosity"                            )
-set( AVRDUDE_VERIFY_FLASH        ""        CACHE STRING "avrdude: flash verification avrdude arguments" )
+set(
+    AVRDUDE_CONFIGURATION_FILE
+    "" CACHE STRING
+    "avrdude: configuration file"
+)
+set(
+    AVRDUDE_PORT
+    "" CACHE STRING
+    "avrdude: port"
+)
+set(
+    AVRDUDE_PROGRAM_FLASH
+    "" CACHE STRING
+    "avrdude: flash programming avrdude arguments"
+)
+set(
+    AVRDUDE_VERBOSITY
+    "VERBOSE" CACHE STRING
+    "avrdude: verbosity"
+)
+set(
+    AVRDUDE_VERIFY_FLASH
+    "" CACHE STRING
+    "avrdude: flash verification avrdude arguments"
+)
 
 if( ${AVRDUDE_RESET_ENABLED} )
     set( AVRDUDE_RESET "RESET" )
