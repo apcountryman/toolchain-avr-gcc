@@ -5,8 +5,7 @@
 `toolchain-avr-gcc` is a CMake toolchain for cross compiling for the Microchip AVR family
 of microcontrollers using avr-gcc.
 In addition to configuring CMake for cross compiling with avr-gcc, the toolchain provides
-an optional function that acts as a wrapper of avrdude for programming and verifying the
-microcontroller's Flash and/or EEPROM.
+optional avrdude utilities.
 
 ## Obtaining the Source Code
 HTTPS:
@@ -24,13 +23,12 @@ To use this toolchain, simply set `CMAKE_TOOLCHAIN_FILE` to the path to this rep
 
 To use the avrdude utilities, add the path to this repository to the project's
 `CMAKE_MODULE_PATH`, and include `avrdude-utilities.cmake`.
+The avrdude utilities include the following functions:
+- `add_avrdude_target()`
+- `add_avrdude_programming_targets()`
 
-Documentation for the usage of `add_avrdude_target()` [can be found in the
+Documentation for the usage of the avrdude utilities [can be found in the
 `avrdude-utilities.cmake` file in this repository](avrdude-utilities.cmake).
-
-Documentation for the usage of `add_avrdude_programming_targets()` and the targets it
-creates [can be found in the `avrdude-utilities.cmake` file in this
-repository](avrdude-utilities.cmake).
 Usage examples [can be found in the `examples` directory in this repository](examples).
 
 ### Finding Tools
