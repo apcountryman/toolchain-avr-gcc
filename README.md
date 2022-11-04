@@ -27,6 +27,7 @@ The avrdude utilities include the following functions:
 - `add_avrdude_target()`
 - `add_avrdude_programming_targets()`
 - `add_avrdude_programming_target()`
+- `add_avrdude_flash_programming_targets()`
 
 Documentation for the usage of the avrdude utilities [can be found in the
 `avrdude-utilities.cmake` file in this repository](avrdude-utilities.cmake).

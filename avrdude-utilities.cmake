@@ -402,3 +402,105 @@ function( add_avrdude_programming_target executable target_postfix )
         ARGUMENTS          ${add_avrdude_programming_target_ARGUMENTS} ${operations}
     )
 endfunction( add_avrdude_programming_target )
+
+# Add avrdude flash programming targets for an executable.
+#
+# SYNOPSIS
+#     add_avrdude_flash_programming_targets(
+#         <executable>
+#         [RESET]
+#         [CONFIGURATION_FILE <configuration_file>]
+#         [PORT <port>]
+#         [VERBOSITY VERY_QUIET|QUIET|VERBOSE|VERY_VERBOSE]
+#         [PROGRAM <avrdude_argument>...]
+#         [VERIFY <avrdude_argument>...]
+#     )
+# OPTIONS
+#     <executable>
+#         Specify the name of the executable that programming targets
+#         ("<executable>-program-flash" and "<executable>-verify-flash") will be created
+#         for.
+#     CONFIGURATION_FILE <configuration_file>
+#         Specify the location of the avrdude configuration file. Equivalent to avrdude's
+#         "-C <configuration_file>" option.
+#     PORT <port>
+#         Specify the port the AVR is connected to. Equivalent to avrdude's "-P <port>"
+#         option.
+#     PROGRAM <avrdude_argument>...
+#         Specify the other avrdude arguments used by the "<executable>-program-flash"
+#         target.
+#     RESET
+#         Reset the AVR before executing avrdude by opening the port the AVR is connected
+#         to at 1200 bits/second, and then closing the port.
+#     VERBOSITY VERY_QUIET|QUIET|VERBOSE|VERY_VERBOSE
+#         Specify avrdude's output verbosity. "VERY_QUIET" is equivalent to avrdude's "-q
+#         -q" option. "QUIET" is equivalent to avrdude's "-q" option. "VERBOSE" is
+#         equivalent to avrdude's "-v" option. "VERY_VERBOSE" is equivalent to avrdude's
+#         "-v -v" option.
+#     VERIFY <avrdude_argument>...
+#         Specify the other avrdude arguments used by the "<executable>-verify-flash"
+#         target.
+# EXAMPLES
+#     add_avrdude_flash_programming_targets(
+#         example
+#         PORT      /dev/ttyACM0
+#         VERBOSITY VERY_VERBOSE
+#         PROGRAM   -p atmega2560 -c wiring -b 115200 -D
+#         VERIFY    -p atmega2560 -c wiring -b 115200
+#     )
+#     add_avrdude_flash_programming_targets(
+#         example
+#         PORT      /dev/ttyACM0
+#         VERBOSITY VERY_VERBOSE
+#         PROGRAM   -p atmega328p -c arduino -b 115200 -D
+#         VERIFY    -p atmega328p -c arduino -b 115200
+#     )
+#     add_avrdude_flash_programming_targets(
+#         example
+#         RESET
+#         PORT      /dev/ttyACM0
+#         VERBOSITY VERY_VERBOSE
+#         PROGRAM   -p atmega4809 -c jtag2updi -b 115200 -e -D
+#         VERIFY    -p atmega4809 -c jtag2updi -b 115200
+#     )
+function( add_avrdude_flash_programming_targets executable )
+    cmake_parse_arguments(
+        add_avrdude_flash_programming_targets
+        "RESET"
+        "CONFIGURATION_FILE;PORT;VERBOSITY"
+        "PROGRAM;VERIFY"
+        ${ARGN}
+    )
+
+    if( DEFINED add_avrdude_flash_programming_targets_UNPARSED_ARGUMENTS )
+        message(
+            FATAL_ERROR
+            "'${add_avrdude_flash_programming_targets_UNPARSED_ARGUMENTS}' are not supported arguments"
+        )
+    endif( DEFINED add_avrdude_flash_programming_targets_UNPARSED_ARGUMENTS )
+
+    if( ${add_avrdude_flash_programming_targets_RESET} )
+        set( reset "RESET" )
+    endif( ${add_avrdude_flash_programming_targets_RESET} )
+
+    add_avrdude_programming_target(
+        "${executable}"
+        "program-flash"
+        ${reset}
+        CONFIGURATION_FILE "${add_avrdude_flash_programming_targets_CONFIGURATION_FILE}"
+        PORT               "${add_avrdude_flash_programming_targets_PORT}"
+        VERBOSITY          "${add_avrdude_flash_programming_targets_VERBOSITY}"
+        OPERATIONS         "flash:w"
+        ARGUMENTS          ${add_avrdude_flash_programming_targets_PROGRAM}
+    )
+    add_avrdude_programming_target(
+        "${executable}"
+        "verify-flash"
+        ${reset}
+        CONFIGURATION_FILE "${add_avrdude_flash_programming_targets_CONFIGURATION_FILE}"
+        PORT               "${add_avrdude_flash_programming_targets_PORT}"
+        VERBOSITY          "${add_avrdude_flash_programming_targets_VERBOSITY}"
+        OPERATIONS         "flash:v"
+        ARGUMENTS          ${add_avrdude_flash_programming_targets_VERIFY}
+    )
+endfunction( add_avrdude_flash_programming_targets )
