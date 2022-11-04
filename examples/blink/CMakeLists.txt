@@ -49,14 +49,14 @@ if( ${EXAMPLES_BLINK_ENABLED} )
         PRIVATE INDICATOR_PIN_NUMBER=${EXAMPLES_BLINK_INDICATOR_PIN_NUMBER}
         PRIVATE INDICATOR_BLINK_FREQUENCY_HZ=${EXAMPLES_BLINK_INDICATOR_BLINK_FREQUENCY_HZ}
     )
-    add_avrdude_programming_targets(
+    add_avrdude_flash_programming_targets(
         blink-c
         ${AVRDUDE_RESET}
         CONFIGURATION_FILE ${AVRDUDE_CONFIGURATION_FILE}
         PORT               ${AVRDUDE_PORT}
-        PROGRAM_FLASH      ${AVRDUDE_PROGRAM_FLASH}
         VERBOSITY          ${AVRDUDE_VERBOSITY}
-        VERIFY_FLASH       ${AVRDUDE_VERIFY_FLASH}
+        PROGRAM            ${AVRDUDE_PROGRAM_FLASH}
+        VERIFY             ${AVRDUDE_VERIFY_FLASH}
     )
 
     add_executable(
@@ -69,13 +69,13 @@ if( ${EXAMPLES_BLINK_ENABLED} )
         PRIVATE INDICATOR_PIN_NUMBER=${EXAMPLES_BLINK_INDICATOR_PIN_NUMBER}
         PRIVATE INDICATOR_BLINK_FREQUENCY_HZ=${EXAMPLES_BLINK_INDICATOR_BLINK_FREQUENCY_HZ}
     )
-    add_avrdude_programming_targets(
+    add_avrdude_flash_programming_targets(
         blink-c++
         ${AVRDUDE_RESET}
         CONFIGURATION_FILE ${AVRDUDE_CONFIGURATION_FILE}
         PORT               ${AVRDUDE_PORT}
-        PROGRAM_FLASH      ${AVRDUDE_PROGRAM_FLASH}
         VERBOSITY          ${AVRDUDE_VERBOSITY}
-        VERIFY_FLASH       ${AVRDUDE_VERIFY_FLASH}
+        PROGRAM            ${AVRDUDE_PROGRAM_FLASH}
+        VERIFY             ${AVRDUDE_VERIFY_FLASH}
     )
 endif( ${EXAMPLES_BLINK_ENABLED} )

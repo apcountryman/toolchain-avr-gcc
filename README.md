@@ -25,7 +25,6 @@ To use the avrdude utilities, add the path to this repository to the project's
 `CMAKE_MODULE_PATH`, and include `avrdude-utilities.cmake`.
 The avrdude utilities include the following functions:
 - `add_avrdude_target()`
-- `add_avrdude_programming_targets()`
 - `add_avrdude_programming_target()`
 - `add_avrdude_flash_programming_targets()`
 - `add_avrdude_eeprom_programming_targets()`
