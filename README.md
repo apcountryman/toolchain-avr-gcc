@@ -26,6 +26,7 @@ To use the avrdude utilities, add the path to this repository to the project's
 The avrdude utilities include the following functions:
 - `add_avrdude_target()`
 - `add_avrdude_programming_targets()`
+- `add_avrdude_programming_target()`
 
 Documentation for the usage of the avrdude utilities [can be found in the
 `avrdude-utilities.cmake` file in this repository](avrdude-utilities.cmake).
