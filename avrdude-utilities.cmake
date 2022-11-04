@@ -300,3 +300,102 @@ function( add_avrdude_programming_targets executable )
         )
     endif( DEFINED add_avrdude_programming_targets_VERIFY_EEPROM )
 endfunction( add_avrdude_programming_targets )
+
+# Add an avrdude programming target for an executable.
+#
+# SYNOPSIS
+#     add_avrdude_programming_target(
+#         <executable>
+#         <target_postfix>
+#         [RESET]
+#         [CONFIGURATION_FILE <configuration_file>]
+#         [PORT <port>]
+#         [VERBOSITY VERY_QUIET|QUIET|VERBOSE|VERY_VERBOSE]
+#         [OPERATIONS <memory_type>:<operation>...]
+#         [ARGUMENTS <avrdude_argument>...]
+#     )
+# OPTIONS
+#     <executable>
+#         Specify the name of the executable that a programming target will be created
+#         for.
+#     <target_postfix>
+#         Specify the postfix of the created avrdude programming target
+#         ("<executable>-<target_postfix>").
+#     ARGUMENTS <avrdude_argument>...
+#         Specify the other avrdude arguments used by the target.
+#     CONFIGURATION_FILE <configuration_file>
+#         Specify the location of the avrdude configuration file. Equivalent to avrdude's
+#         "-C <configuration_file>" option.
+#     OPERATIONS <memory_type>:<operation>...
+#         Specify the memory operations to perform. Equivalent to avrdude's "-U
+#         <memory_type>:<operation>:<filename>[:format]" option, but only write and verify
+#         operations are supported.
+#     PORT <port>
+#         Specify the port the AVR is connected to. Equivalent to avrdude's "-P <port>"
+#         option.
+#     RESET
+#         Reset the AVR before executing avrdude by opening the port the AVR is connected
+#         to at 1200 bits/second, and then closing the port.
+#     VERBOSITY VERY_QUIET|QUIET|VERBOSE|VERY_VERBOSE
+#         Specify avrdude's output verbosity. "VERY_QUIET" is equivalent to avrdude's "-q
+#         -q" option. "QUIET" is equivalent to avrdude's "-q" option. "VERBOSE" is
+#         equivalent to avrdude's "-v" option. "VERY_VERBOSE" is equivalent to avrdude's
+#         "-v -v" option.
+# EXAMPLES
+#     add_avrdude_programming_target(
+#         example
+#         PORT       /dev/ttyACM0
+#         VERBOSITY  VERY_VERBOSE
+#         OPERATIONS flash:w eeprom:w
+#         ARGUMENTS  -p atmega2560 -c wiring -b 115200 -D
+#     )
+#     add_avrdude_programming_target(
+#         example
+#         PORT       /dev/ttyACM0
+#         VERBOSITY  VERY_VERBOSE
+#         OPERATIONS flash:w eeprom:w
+#         ARGUMENTS  -p atmega328p -c arduino -b 115200 -D
+#     )
+#     add_avrdude_programming_target(
+#         example
+#         RESET
+#         PORT       /dev/ttyACM0
+#         VERBOSITY  VERY_VERBOSE
+#         OPERATIONS flash:w eeprom:w
+#         ARGUMENTS  -p atmega4809 -c jtag2updi -b 115200 -e -D
+#     )
+function( add_avrdude_programming_target executable target_postfix )
+    cmake_parse_arguments(
+        add_avrdude_programming_target
+        "RESET"
+        "CONFIGURATION_FILE;PORT;VERBOSITY"
+        "ARGUMENTS;OPERATIONS"
+        ${ARGN}
+    )
+
+    if( DEFINED add_avrdude_programming_target_UNPARSED_ARGUMENTS )
+        message(
+            FATAL_ERROR
+            "'${add_avrdude_programming_target_UNPARSED_ARGUMENTS}' are not supported arguments"
+        )
+    endif( DEFINED add_avrdude_programming_target_UNPARSED_ARGUMENTS )
+
+    if( ${add_avrdude_programming_target_RESET} )
+        set( reset "RESET" )
+    endif( ${add_avrdude_programming_target_RESET} )
+
+    set( operations "" )
+    foreach( operation ${add_avrdude_programming_target_OPERATIONS} )
+        list( APPEND operations "-U" "${operation}:${executable}:e" )
+    endforeach( operation ${add_avrdude_programming_target_OPERATIONS} )
+
+    add_avrdude_target(
+        "${executable}-${target_postfix}"
+        DEPENDS "${executable}"
+        ${reset}
+        CONFIGURATION_FILE "${add_avrdude_programming_target_CONFIGURATION_FILE}"
+        PORT               "${add_avrdude_programming_target_PORT}"
+        VERBOSITY          "${add_avrdude_programming_target_VERBOSITY}"
+        ARGUMENTS          ${add_avrdude_programming_target_ARGUMENTS} ${operations}
+    )
+endfunction( add_avrdude_programming_target )
