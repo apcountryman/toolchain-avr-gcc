@@ -344,6 +344,7 @@ endfunction( add_avrdude_programming_targets )
 # EXAMPLES
 #     add_avrdude_programming_target(
 #         example
+#         program-flash-eeprom
 #         PORT       /dev/ttyACM0
 #         VERBOSITY  VERY_VERBOSE
 #         OPERATIONS flash:w eeprom:w
@@ -351,6 +352,7 @@ endfunction( add_avrdude_programming_targets )
 #     )
 #     add_avrdude_programming_target(
 #         example
+#         program-flash-eeprom
 #         PORT       /dev/ttyACM0
 #         VERBOSITY  VERY_VERBOSE
 #         OPERATIONS flash:w eeprom:w
@@ -358,6 +360,7 @@ endfunction( add_avrdude_programming_targets )
 #     )
 #     add_avrdude_programming_target(
 #         example
+#         program-flash-eeprom
 #         RESET
 #         PORT       /dev/ttyACM0
 #         VERBOSITY  VERY_VERBOSE
