@@ -347,7 +347,7 @@ endfunction( add_avrdude_programming_targets )
 #         program-flash-eeprom
 #         PORT       /dev/ttyACM0
 #         VERBOSITY  VERY_VERBOSE
-#         OPERATIONS flash:w eeprom:w
+#         OPERATIONS flash:w
 #         ARGUMENTS  -p atmega2560 -c wiring -b 115200 -D
 #     )
 #     add_avrdude_programming_target(
@@ -355,7 +355,7 @@ endfunction( add_avrdude_programming_targets )
 #         program-flash-eeprom
 #         PORT       /dev/ttyACM0
 #         VERBOSITY  VERY_VERBOSE
-#         OPERATIONS flash:w eeprom:w
+#         OPERATIONS flash:w
 #         ARGUMENTS  -p atmega328p -c arduino -b 115200 -D
 #     )
 #     add_avrdude_programming_target(
@@ -364,7 +364,7 @@ endfunction( add_avrdude_programming_targets )
 #         RESET
 #         PORT       /dev/ttyACM0
 #         VERBOSITY  VERY_VERBOSE
-#         OPERATIONS flash:w eeprom:w
+#         OPERATIONS flash:w
 #         ARGUMENTS  -p atmega4809 -c jtag2updi -b 115200 -e -D
 #     )
 function( add_avrdude_programming_target executable target_postfix )
