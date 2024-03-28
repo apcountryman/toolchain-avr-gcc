@@ -19,10 +19,10 @@ Use your best judgment.
 
 # I have a question
 If you have a question, please review the relevant project documentation, and
-search/browse existing issues.
+search/browse existing issues and discussions.
 If you have not found an answer to your question after reviewing the relevant project
-documentation and searching/browsing existing issues, please use the `question` issue
-template to open an issue to ask your question.
+documentation and searching/browsing existing issues and discussions, please open a
+discussion to ask your question.
 
 # How can I contribute
 
