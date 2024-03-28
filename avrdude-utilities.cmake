@@ -73,13 +73,13 @@ function( add_avrdude_target target )
         "CONFIGURATION_FILE;PORT;VERBOSITY"
         "ARGUMENTS;DEPENDS"
         ${ARGN}
-    )
+        )
 
     if( DEFINED add_avrdude_target_UNPARSED_ARGUMENTS )
         message(
             FATAL_ERROR
             "'${add_avrdude_target_UNPARSED_ARGUMENTS}' are not supported arguments"
-        )
+            )
     endif( DEFINED add_avrdude_target_UNPARSED_ARGUMENTS )
 
     set( reset_arguments   "" )
@@ -116,13 +116,13 @@ function( add_avrdude_target target )
             COMMAND "${TOOLCHAIN_AVR_GCC_DIR}/utility/reset.py" ${reset_arguments}
             COMMAND "${CMAKE_AVRDUDE}" ${avrdude_arguments}
             DEPENDS ${add_avrdude_target_DEPENDS}
-        )
+            )
     else( ${add_avrdude_target_RESET} )
         add_custom_target(
             "${target}"
             COMMAND "${CMAKE_AVRDUDE}" ${avrdude_arguments}
             DEPENDS ${add_avrdude_target_DEPENDS}
-        )
+            )
     endif( ${add_avrdude_target_RESET} )
 endfunction( add_avrdude_target target )
 
@@ -199,13 +199,13 @@ function( add_avrdude_programming_target executable target_postfix )
         "CONFIGURATION_FILE;PORT;VERBOSITY"
         "ARGUMENTS;OPERATIONS"
         ${ARGN}
-    )
+        )
 
     if( DEFINED add_avrdude_programming_target_UNPARSED_ARGUMENTS )
         message(
             FATAL_ERROR
             "'${add_avrdude_programming_target_UNPARSED_ARGUMENTS}' are not supported arguments"
-        )
+            )
     endif( DEFINED add_avrdude_programming_target_UNPARSED_ARGUMENTS )
 
     if( ${add_avrdude_programming_target_RESET} )
@@ -225,7 +225,7 @@ function( add_avrdude_programming_target executable target_postfix )
         PORT               "${add_avrdude_programming_target_PORT}"
         VERBOSITY          "${add_avrdude_programming_target_VERBOSITY}"
         ARGUMENTS          ${add_avrdude_programming_target_ARGUMENTS} ${operations}
-    )
+        )
 endfunction( add_avrdude_programming_target )
 
 # Add avrdude flash programming targets for an executable.
@@ -295,13 +295,13 @@ function( add_avrdude_flash_programming_targets executable )
         "CONFIGURATION_FILE;PORT;VERBOSITY"
         "PROGRAM;VERIFY"
         ${ARGN}
-    )
+        )
 
     if( DEFINED add_avrdude_flash_programming_targets_UNPARSED_ARGUMENTS )
         message(
             FATAL_ERROR
             "'${add_avrdude_flash_programming_targets_UNPARSED_ARGUMENTS}' are not supported arguments"
-        )
+            )
     endif( DEFINED add_avrdude_flash_programming_targets_UNPARSED_ARGUMENTS )
 
     if( ${add_avrdude_flash_programming_targets_RESET} )
@@ -317,7 +317,7 @@ function( add_avrdude_flash_programming_targets executable )
         VERBOSITY          "${add_avrdude_flash_programming_targets_VERBOSITY}"
         OPERATIONS         "flash:w"
         ARGUMENTS          ${add_avrdude_flash_programming_targets_PROGRAM}
-    )
+        )
     add_avrdude_programming_target(
         "${executable}"
         "verify-flash"
@@ -327,7 +327,7 @@ function( add_avrdude_flash_programming_targets executable )
         VERBOSITY          "${add_avrdude_flash_programming_targets_VERBOSITY}"
         OPERATIONS         "flash:v"
         ARGUMENTS          ${add_avrdude_flash_programming_targets_VERIFY}
-    )
+        )
 endfunction( add_avrdude_flash_programming_targets )
 
 # Add avrdude EEPROM programming targets for an executable.
@@ -375,13 +375,13 @@ function( add_avrdude_eeprom_programming_targets executable )
         "CONFIGURATION_FILE;PORT;VERBOSITY"
         "PROGRAM;VERIFY"
         ${ARGN}
-    )
+        )
 
     if( DEFINED add_avrdude_eeprom_programming_targets_UNPARSED_ARGUMENTS )
         message(
             FATAL_ERROR
             "'${add_avrdude_eeprom_programming_targets_UNPARSED_ARGUMENTS}' are not supported arguments"
-        )
+            )
     endif( DEFINED add_avrdude_eeprom_programming_targets_UNPARSED_ARGUMENTS )
 
     if( ${add_avrdude_eeprom_programming_targets_RESET} )
@@ -397,7 +397,7 @@ function( add_avrdude_eeprom_programming_targets executable )
         VERBOSITY          "${add_avrdude_eeprom_programming_targets_VERBOSITY}"
         OPERATIONS         "eeprom:w"
         ARGUMENTS          ${add_avrdude_eeprom_programming_targets_PROGRAM}
-    )
+        )
     add_avrdude_programming_target(
         "${executable}"
         "verify-eeprom"
@@ -407,5 +407,5 @@ function( add_avrdude_eeprom_programming_targets executable )
         VERBOSITY          "${add_avrdude_eeprom_programming_targets_VERBOSITY}"
         OPERATIONS         "eeprom:v"
         ARGUMENTS          ${add_avrdude_eeprom_programming_targets_VERIFY}
-    )
+        )
 endfunction( add_avrdude_eeprom_programming_targets )
