@@ -13,7 +13,6 @@
 # KIND, either express or implied. See the License for the specific language governing
 # permissions and limitations under the License.
 
-# File: CMakeLists.txt
 # Description: toolchain-avr-gcc core CMake rules.
 
 cmake_minimum_required( VERSION 3.13.4 )

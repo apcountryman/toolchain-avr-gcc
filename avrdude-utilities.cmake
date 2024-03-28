@@ -13,7 +13,6 @@
 # KIND, either express or implied. See the License for the specific language governing
 # permissions and limitations under the License.
 
-# File: avrdude-utilities.cmake
 # Description: CMake avrdude utilities.
 
 set( TOOLCHAIN_AVR_GCC_DIR "${CMAKE_CURRENT_LIST_DIR}" )
