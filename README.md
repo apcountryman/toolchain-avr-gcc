@@ -31,7 +31,6 @@ The avrdude utilities include the following functions:
 
 Documentation for the usage of the avrdude utilities [can be found in the
 `avrdude-utilities.cmake` file in this repository](avrdude-utilities.cmake).
-Usage examples [can be found in the `examples` directory in this repository](examples).
 
 ### Finding Tools
 This toolchain expects to find `avr-gcc`, `avr-g++`, associated binary utilities, and

@@ -82,7 +82,7 @@ function display_version()
 
 function ensure_filenames_are_portable()
 {
-    message "checking for non-portable (non-ASCII) filenames .............................. "
+    message "checking for non-portable (non-ASCII) filenames ... "
 
     if [[ $( git -C "$repository" diff --cached --name-only --diff-filter=A -z "$against" | LC_ALL=C tr -d '[ -~]\0' | wc -c ) != 0 ]]; then
         errors_found
@@ -95,7 +95,7 @@ function ensure_filenames_are_portable()
 
 function ensure_no_whitespace_errors_are_present()
 {
-    message "checking for whitespace errors ............................................... "
+    message "checking for whitespace errors .................... "
 
     if ! git -C "$repository" diff-index --check --cached "$against" -- > "/dev/null" 2>&1; then
         errors_found
@@ -109,7 +109,7 @@ function ensure_no_whitespace_errors_are_present()
 
 function ensure_no_script_errors_are_present()
 {
-    message "checking for script errors ................................................... "
+    message "checking for script errors ........................ "
 
     local scripts; mapfile -t scripts < <( git -C "$repository" ls-files ':!:*.py' | xargs -r -d '\n' -I '{}' find "$repository/{}" -executable ); readonly scripts
 
@@ -125,96 +125,36 @@ function ensure_no_script_errors_are_present()
 
 function ensure_no_build_errors_are_present()
 {
-    local -r build_type="$1"
-    local -r ellipsis="$2"
-
-    message "checking for ($build_type) build errors $ellipsis "
+    message "checking for build errors ......................... "
 
     local -r toolchain_file="$repository/toolchain.cmake"
-    local -r build_directory="$repository/build/$build_type"
-    local -r build_configuration="$repository/configuration/$build_type/CMakeLists.txt"
+    local -r build_directory="$repository/build"
 
     if [[ ! -d "$build_directory" ]]; then
-        if ! cmake -DCMAKE_TOOLCHAIN_FILE="$toolchain_file" -C "$build_configuration" -S "$repository" -B "$build_directory" > "/dev/null" 2>&1; then
+        if ! cmake -DCMAKE_TOOLCHAIN_FILE="$toolchain_file" -S "$repository" -B "$build_directory" > "/dev/null" 2>&1; then
             errors_found
-            error "aborting commit due to ($build_type) build CMake initialization error(s), listed below"
+            error "aborting commit due to CMake initialization error(s), listed below"
             rm -rf "$build_directory"
-            cmake -DCMAKE_TOOLCHAIN_FILE="$toolchain_file" -C "$build_configuration" -S "$repository" -B "$build_directory"
+            cmake -DCMAKE_TOOLCHAIN_FILE="$toolchain_file" -S "$repository" -B "$build_directory"
             abort
         fi
     fi
 
-    if ! cmake -C "$build_configuration" "$build_directory" > "/dev/null" 2>&1; then
+    if ! cmake "$build_directory" > "/dev/null" 2>&1; then
         errors_found
-        error "aborting commit due to ($build_type) build CMake configuration error(s), listed below"
-        cmake -C "$build_configuration" "$build_directory"
+        error "aborting commit due to CMake configuration error(s), listed below"
+        cmake "$build_directory"
         abort
     fi
 
     if ! cmake --build "$build_directory" -j "$build_jobs" > "/dev/null" 2>&1; then
         errors_found
-        error "aborting commit due to ($build_type) build CMake build error(s), listed below"
+        error "aborting commit due to CMake build error(s), listed below"
         cmake --build "$build_directory" -j "$build_jobs"
         abort
     fi
 
     echo "none"
-}
-
-function ensure_no_atmega2560_arduino_mega_2560_build_errors_are_present()
-{
-    local -r build_type="atmega2560-arduino-mega-2560"
-    local -r ellipsis="....................."
-
-    ensure_no_build_errors_are_present "$build_type" "$ellipsis"
-}
-
-function ensure_no_atmega328p_adafruit_feather_328p_build_errors_are_present()
-{
-    local -r build_type="atmega328p-adafruit-feather-328p"
-    local -r ellipsis="................."
-
-    ensure_no_build_errors_are_present "$build_type" "$ellipsis"
-}
-
-function ensure_no_atmega328p_adafruit_metro_mini_build_errors_are_present()
-{
-    local -r build_type="atmega328p-adafruit-metro-mini"
-    local -r ellipsis="..................."
-
-    ensure_no_build_errors_are_present "$build_type" "$ellipsis"
-}
-
-function ensure_no_atmega328p_arduino_uno_build_errors_are_present()
-{
-    local -r build_type="atmega328p-arduino-uno"
-    local -r ellipsis="..........................."
-
-    ensure_no_build_errors_are_present "$build_type" "$ellipsis"
-}
-
-function ensure_no_atmega32u4_adafruit_circuit_playground_classic_build_errors_are_present()
-{
-    local -r build_type="atmega32u4-adafruit-circuit-playground-classic"
-    local -r ellipsis="..."
-
-    ensure_no_build_errors_are_present "$build_type" "$ellipsis"
-}
-
-function ensure_no_atmega32u4_adafruit_feather_32u4_adalogger_build_errors_are_present()
-{
-    local -r build_type="atmega32u4-adafruit-feather-32u4-adalogger"
-    local -r ellipsis="......."
-
-    ensure_no_build_errors_are_present "$build_type" "$ellipsis"
-}
-
-function ensure_no_atmega32u4_adafruit_feather_32u4_basic_proto_build_errors_are_present()
-{
-    local -r build_type="atmega32u4-adafruit-feather-32u4-basic-proto"
-    local -r ellipsis="....."
-
-    ensure_no_build_errors_are_present "$build_type" "$ellipsis"
 }
 
 function main()
@@ -272,13 +212,7 @@ function main()
     ensure_filenames_are_portable
     ensure_no_whitespace_errors_are_present
     ensure_no_script_errors_are_present
-    ensure_no_atmega2560_arduino_mega_2560_build_errors_are_present
-    ensure_no_atmega328p_adafruit_feather_328p_build_errors_are_present
-    ensure_no_atmega328p_adafruit_metro_mini_build_errors_are_present
-    ensure_no_atmega328p_arduino_uno_build_errors_are_present
-    ensure_no_atmega32u4_adafruit_circuit_playground_classic_build_errors_are_present
-    ensure_no_atmega32u4_adafruit_feather_32u4_adalogger_build_errors_are_present
-    ensure_no_atmega32u4_adafruit_feather_32u4_basic_proto_build_errors_are_present
+    ensure_no_build_errors_are_present
 }
 
 main "$@"
