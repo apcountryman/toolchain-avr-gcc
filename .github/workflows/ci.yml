@@ -33,4 +33,4 @@ jobs:
             - uses: actions/checkout@v4
             - name: Analyze
               shell: bash
-              run: ./ci/analyze --analyzer shellcheck
+              run: ./ci/analyze.sh --analyzer shellcheck
