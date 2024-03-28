@@ -42,7 +42,7 @@ jobs:
             - uses: actions/checkout@v4
             - name: Install dependencies
               shell: bash
-              run: sudo apt update && sudo apt install avrdude gcc-avr
+              run: sudo apt update && sudo apt install avr-libc avrdude gcc-avr
             - name: Build
               shell: bash
               run: ./ci/build.sh
