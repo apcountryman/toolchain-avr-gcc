@@ -13,7 +13,7 @@
 # KIND, either express or implied. See the License for the specific language governing
 # permissions and limitations under the License.
 
-# Description: Git ignore rules for the toolchain-avr-gcc repository.
+# Description: Git ignore rules.
 
 # ignore the build directory
 build/
