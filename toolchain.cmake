@@ -21,7 +21,7 @@ cmake_minimum_required( VERSION 3.13.4 )
 mark_as_advanced(
     CMAKE_TOOLCHAIN_FILE
     CMAKE_INSTALL_PREFIX
-)
+    )
 
 set( CMAKE_SYSTEM_NAME      "Generic"   )
 set( CMAKE_SYSTEM_PROCESSOR "Microchip-AVR" )
