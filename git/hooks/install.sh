@@ -15,7 +15,7 @@
 # KIND, either express or implied. See the License for the specific language governing
 # permissions and limitations under the License.
 
-# Description: CI static analysis script.
+# Description: Git hooks install script.
 
 function error()
 {
@@ -35,27 +35,32 @@ function abort()
     exit 1
 }
 
+function validate_script()
+{
+    if ! shellcheck "$script"; then
+        abort
+    fi
+}
+
 function display_help_text()
 {
-    echo "NAME"
-    echo "    $mnemonic - Run a static analyzer against toolchain-avr-gcc."
-    echo "SYNOPSIS"
-    echo "    $mnemonic --help"
-    echo "    $mnemonic --version"
-    echo "    $mnemonic --analyzer <analyzer>"
-    echo "OPTIONS"
-    echo "    --analyzer <analyzer>"
-    echo "        Specify the analyzer to run against toolchain-avr-gcc. The following"
-    echo "        analyzers are supported:"
-    echo "            shellcheck"
-    echo "    --help"
-    echo "        Display this help text."
-    echo "    --version"
-    echo "        Display the version of this script."
-    echo "EXAMPLES"
-    echo "    $mnemonic --help"
-    echo "    $mnemonic --version"
-    echo "    $mnemonic --analyzer shellcheck"
+    printf "%b" \
+        "NAME\n" \
+        "    $mnemonic - Install Git hooks.\n" \
+        "SYNOPSIS\n" \
+        "    $mnemonic --help\n" \
+        "    $mnemonic --version\n" \
+        "    $mnemonic\n" \
+        "OPTIONS\n" \
+        "    --help\n" \
+        "        Display this help text.\n" \
+        "    --version\n" \
+        "        Display the version of this script.\n" \
+        "EXAMPLES\n" \
+        "    $mnemonic --help\n" \
+        "    $mnemonic --version\n" \
+        "    $mnemonic\n" \
+        ""
 }
 
 function display_version()
@@ -63,46 +68,36 @@ function display_version()
     echo "$mnemonic, version $version"
 }
 
-function run_shellcheck()
+function install_git_hooks()
 {
-    local scripts; mapfile -t scripts < <( git -C "$repository" ls-files ':!:*.py' | xargs -r -d '\n' -I '{}' find "$repository/{}" -executable ); readonly scripts
+    local hook_scripts; mapfile -t hook_scripts < <( git -C "$repository" ls-files 'git/hooks/' ':!:git/hooks/install.sh' | xargs -r -d '\n' -I '{}' find "$repository/{}" ); readonly hook_scripts
 
-    if ! shellcheck "${scripts[@]}"; then
-        abort
-    fi
-}
+    local hook_script
+    for hook_script in "${hook_scripts[@]}"; do
+        local hook; hook=$( basename "$hook_script" | cut -f 1 -d '.' )
 
-function ensure_no_static_analysis_errors_are_present()
-{
-    "run_$analyzer"
+        rm -f "$repository/.git/hooks/$hook"
+
+        if ! ln -s "$hook_script" "$repository/.git/hooks/$hook"; then
+            abort "'$hook' installation failure"
+        fi
+    done
 }
 
 function main()
 {
     local -r script=$( readlink -f "$0" )
     local -r mnemonic=$( basename "$script" )
-    local -r repository=$( readlink -f "$( dirname "$script" )/.." )
+
+    validate_script
+
+    local -r repository=$( readlink -f "$( dirname "$script" )/../.." )
     local -r version=$( git -C "$repository" describe --match=none --always --dirty --broken )
 
     while [[ "$#" -gt 0 ]]; do
         local argument="$1"; shift
 
         case "$argument" in
-            --analyzer)
-                if [[ -n "$analyzer" ]]; then
-                    abort "analyzer already specified"
-                fi
-
-                if [[ "$#" -le 0 ]]; then
-                    abort "analyzer not specified"
-                fi
-
-                local -r analyzer="$1"; shift
-
-                if [[ "$analyzer" != "shellcheck" ]]; then
-                    abort "'$analyzer' is not a supported analyzer"
-                fi
-                ;;
             --help)
                 display_help_text
                 exit
@@ -122,11 +117,7 @@ function main()
         esac
     done
 
-    if [[ -z "$analyzer" ]]; then
-        abort "'--analyzer' must be specified"
-    fi
-
-    ensure_no_static_analysis_errors_are_present
+    install_git_hooks
 }
 
 main "$@"

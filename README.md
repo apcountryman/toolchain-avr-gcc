@@ -45,11 +45,11 @@ If the toolchain fails to locate tools, consult the documentation for CMake's
 
 ## Usage (Development)
 
-This repository's Git `pre-commit` hook script is the simplest way to configure, build,
+This repository's Git `pre-commit.sh` hook script is the simplest way to configure, build,
 and test this project during development.
-See the `pre-commit` script's help text for usage details.
+See the `pre-commit.sh` script's help text for usage details.
 ```shell
-./git/hooks/pre-commit --help
+./git/hooks/pre-commit.sh --help
 ```
 
 Additional checks, such as static analysis, are performed by this project's GitHub Actions
@@ -67,11 +67,11 @@ workflow.
 
 ## Git Hooks
 
-To install this repository's Git hooks, run the `install` script located in the
+To install this repository's Git hooks, run the `install.sh` script located in the
 `git/hooks` directory.
-See the `install` script's help text for usage details.
+See the `install.sh` script's help text for usage details.
 ```
-$ ./git/hooks/install --help
+$ ./git/hooks/install.sh --help
 ```
 
 ## Code of Conduct
