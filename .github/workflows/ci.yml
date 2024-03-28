@@ -27,8 +27,8 @@ on:
             - main
 
 jobs:
-    analyze-static-shellcheck:
-        name: Analyze (static) - shellcheck
+    analyze-shellcheck:
+        name: Analyze (shellcheck)
         runs-on: ubuntu-20.04
         steps:
             - uses: actions/checkout@v4
