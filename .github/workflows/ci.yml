@@ -31,7 +31,7 @@ jobs:
         name: Analyze (static) - shellcheck
         runs-on: ubuntu-20.04
         steps:
-            - uses: actions/checkout@v3
+            - uses: actions/checkout@v4
             - name: Analyze
               shell: bash
               run: ./ci/analyze --analyzer shellcheck
