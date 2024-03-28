@@ -34,3 +34,15 @@ jobs:
             - name: Analyze
               shell: bash
               run: ./ci/analyze.sh --analyzer shellcheck
+
+    build:
+        name: Build
+        runs-on: ubuntu-20.04
+        steps:
+            - uses: actions/checkout@v4
+            - name: Install dependencies
+              shell: bash
+              run: sudo apt update && sudo apt install avrdude gcc-avr
+            - name: Build
+              shell: bash
+              run: ./ci/build.sh
