@@ -16,8 +16,7 @@
 # Description: Core CMake rules.
 
 cmake_minimum_required( VERSION 3.13.4 )
-project(
-    toolchain-avr-gcc
+project( toolchain-avr-gcc
     LANGUAGES C CXX
     )
 
