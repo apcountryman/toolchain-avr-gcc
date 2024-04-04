@@ -55,8 +55,8 @@ function display_help_text()
         "    --help\n" \
         "        Display this help text.\n" \
         "    --jobs <jobs>\n" \
-        "        Specify the number of build jobs to use when building. If the number of\n" \
-        "        jobs is not specified, 'nproc - 1' jobs will be used.\n" \
+        "        Specify the number of build jobs to use when building. If the number\n" \
+        "        of jobs is not specified, 'nproc - 1' jobs will be used.\n" \
         "    --version\n" \
         "        Display the version of this script.\n" \
         "EXAMPLES\n" \
