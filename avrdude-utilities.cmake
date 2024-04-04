@@ -19,9 +19,9 @@ set( TOOLCHAIN_AVR_GCC_DIR "${CMAKE_CURRENT_LIST_DIR}" )
 
 find_program( CMAKE_AVRDUDE avrdude )
 mark_as_advanced( CMAKE_AVRDUDE )
-if( "${CMAKE_AVRDUDE}" STREQUAL "CMAKE_AVRDUDE-NOTFOUND" )
+if( CMAKE_AVRDUDE STREQUAL "CMAKE_AVRDUDE-NOTFOUND" )
     message( FATAL_ERROR "avrdude not found" )
-endif( "${CMAKE_AVRDUDE}" STREQUAL "CMAKE_AVRDUDE-NOTFOUND" )
+endif( CMAKE_AVRDUDE STREQUAL "CMAKE_AVRDUDE-NOTFOUND" )
 
 # Add avrdude target.
 #
@@ -94,35 +94,35 @@ function( add_avrdude_target target )
     endif( DEFINED add_avrdude_target_PORT )
 
     if( DEFINED add_avrdude_target_VERBOSITY )
-        if( "${add_avrdude_target_VERBOSITY}" STREQUAL "VERY_QUIET" )
+        if( add_avrdude_target_VERBOSITY STREQUAL "VERY_QUIET" )
             list( APPEND avrdude_arguments "-q" "-q" )
-        elseif( "${add_avrdude_target_VERBOSITY}" STREQUAL "QUIET" )
+        elseif( add_avrdude_target_VERBOSITY STREQUAL "QUIET" )
             list( APPEND avrdude_arguments "-q" )
-        elseif( "${add_avrdude_target_VERBOSITY}" STREQUAL "VERBOSE" )
+        elseif( add_avrdude_target_VERBOSITY STREQUAL "VERBOSE" )
             list( APPEND avrdude_arguments "-v" )
-        elseif( "${add_avrdude_target_VERBOSITY}" STREQUAL "VERY_VERBOSE" )
+        elseif( add_avrdude_target_VERBOSITY STREQUAL "VERY_VERBOSE" )
             list( APPEND avrdude_arguments "-v" "-v" )
-        else( "${add_avrdude_target_VERBOSITY}" STREQUAL "VERY_QUIET" )
+        else( add_avrdude_target_VERBOSITY STREQUAL "VERY_QUIET" )
             message( FATAL_ERROR "'${add_avrdude_target_VERBOSITY}' is not a supported verbosity" )
-        endif( "${add_avrdude_target_VERBOSITY}" STREQUAL "VERY_QUIET" )
+        endif( add_avrdude_target_VERBOSITY STREQUAL "VERY_QUIET" )
     endif( DEFINED add_avrdude_target_VERBOSITY )
 
     list( APPEND avrdude_arguments ${add_avrdude_target_ARGUMENTS} )
 
-    if( ${add_avrdude_target_RESET} )
+    if( add_avrdude_target_RESET )
         add_custom_target(
             "${target}"
             COMMAND "${TOOLCHAIN_AVR_GCC_DIR}/utility/reset.py" ${reset_arguments}
             COMMAND "${CMAKE_AVRDUDE}" ${avrdude_arguments}
             DEPENDS ${add_avrdude_target_DEPENDS}
             )
-    else( ${add_avrdude_target_RESET} )
+    else( add_avrdude_target_RESET )
         add_custom_target(
             "${target}"
             COMMAND "${CMAKE_AVRDUDE}" ${avrdude_arguments}
             DEPENDS ${add_avrdude_target_DEPENDS}
             )
-    endif( ${add_avrdude_target_RESET} )
+    endif( add_avrdude_target_RESET )
 endfunction( add_avrdude_target target )
 
 # Add an avrdude programming target for an executable.
@@ -207,9 +207,9 @@ function( add_avrdude_programming_target executable target_postfix )
             )
     endif( DEFINED add_avrdude_programming_target_UNPARSED_ARGUMENTS )
 
-    if( ${add_avrdude_programming_target_RESET} )
+    if( add_avrdude_programming_target_RESET )
         set( reset "RESET" )
-    endif( ${add_avrdude_programming_target_RESET} )
+    endif( add_avrdude_programming_target_RESET )
 
     set( operations "" )
     foreach( operation ${add_avrdude_programming_target_OPERATIONS} )
@@ -303,9 +303,9 @@ function( add_avrdude_flash_programming_targets executable )
             )
     endif( DEFINED add_avrdude_flash_programming_targets_UNPARSED_ARGUMENTS )
 
-    if( ${add_avrdude_flash_programming_targets_RESET} )
+    if( add_avrdude_flash_programming_targets_RESET )
         set( reset "RESET" )
-    endif( ${add_avrdude_flash_programming_targets_RESET} )
+    endif( add_avrdude_flash_programming_targets_RESET )
 
     add_avrdude_programming_target(
         "${executable}"
@@ -383,9 +383,9 @@ function( add_avrdude_eeprom_programming_targets executable )
             )
     endif( DEFINED add_avrdude_eeprom_programming_targets_UNPARSED_ARGUMENTS )
 
-    if( ${add_avrdude_eeprom_programming_targets_RESET} )
+    if( add_avrdude_eeprom_programming_targets_RESET )
         set( reset "RESET" )
-    endif( ${add_avrdude_eeprom_programming_targets_RESET} )
+    endif( add_avrdude_eeprom_programming_targets_RESET )
 
     add_avrdude_programming_target(
         "${executable}"
