@@ -75,8 +75,7 @@ function( add_avrdude_target target )
         )
 
     if( DEFINED add_avrdude_target_UNPARSED_ARGUMENTS )
-        message(
-            FATAL_ERROR
+        message( FATAL_ERROR
             "'${add_avrdude_target_UNPARSED_ARGUMENTS}' are not supported arguments"
             )
     endif( DEFINED add_avrdude_target_UNPARSED_ARGUMENTS )
@@ -201,8 +200,7 @@ function( add_avrdude_programming_target executable target_postfix )
         )
 
     if( DEFINED add_avrdude_programming_target_UNPARSED_ARGUMENTS )
-        message(
-            FATAL_ERROR
+        message( FATAL_ERROR
             "'${add_avrdude_programming_target_UNPARSED_ARGUMENTS}' are not supported arguments"
             )
     endif( DEFINED add_avrdude_programming_target_UNPARSED_ARGUMENTS )
@@ -297,8 +295,7 @@ function( add_avrdude_flash_programming_targets executable )
         )
 
     if( DEFINED add_avrdude_flash_programming_targets_UNPARSED_ARGUMENTS )
-        message(
-            FATAL_ERROR
+        message( FATAL_ERROR
             "'${add_avrdude_flash_programming_targets_UNPARSED_ARGUMENTS}' are not supported arguments"
             )
     endif( DEFINED add_avrdude_flash_programming_targets_UNPARSED_ARGUMENTS )
@@ -377,8 +374,7 @@ function( add_avrdude_eeprom_programming_targets executable )
         )
 
     if( DEFINED add_avrdude_eeprom_programming_targets_UNPARSED_ARGUMENTS )
-        message(
-            FATAL_ERROR
+        message( FATAL_ERROR
             "'${add_avrdude_eeprom_programming_targets_UNPARSED_ARGUMENTS}' are not supported arguments"
             )
     endif( DEFINED add_avrdude_eeprom_programming_targets_UNPARSED_ARGUMENTS )
